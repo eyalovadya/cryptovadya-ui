@@ -1,0 +1,1 @@
+export { baseColorStyle } from './baseColorStyle';
