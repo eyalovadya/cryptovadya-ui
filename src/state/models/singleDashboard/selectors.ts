@@ -8,4 +8,8 @@ const dashboard = createSelector(currentDashboardId, dashboardsSelectors.dashboa
     return dashboards.find((dashboard) => dashboard.id === dashboardId);
 });
 
-export { dashboard };
+export { default as singleDashboardSelectors } from './selectors';
+
+const selectors = { dashboard };
+
+export default selectors;

@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { baseColorStyle } from '../../../shared/styles';
-import { appSelectors } from '../../../state/models/app/selectors';
-import { RootState, Dispatch } from '../../../state/store';
+import { baseColorStyle } from '../../shared/styles';
+import { appSelectors } from '../../state/models/app/selectors';
+import { RootState, Dispatch } from '../../state/store';
 
 type Props = {
     isDarkTheme: boolean;
@@ -41,6 +41,11 @@ const Container = styled.div`
 const Title = styled.div`
     font-size: ${(props) => props.theme.textSize.titleBig};
     font-weight: bold;
+    background-image: ${(props) => props.theme.colors.primaryGradient};
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
 `;
 
 const ThemeBtn = styled.button`

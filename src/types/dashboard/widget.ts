@@ -3,6 +3,8 @@ export type WidgetType = 'STAT_CARD';
 export type StatCardData = {
     baseCurrency: string;
     quoteCurrency: string;
+    data: number;
+    dayDiffPrecent: number;
 };
 
 export type Widget<T extends WidgetType = any> = {

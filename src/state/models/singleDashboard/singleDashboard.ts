@@ -10,7 +10,7 @@ export const singleDashboard = createModel<RootModel>()({
         currentDashboardId: null
     } as SingleDashboardStateType,
     reducers: {
-        setCuurentDashboardId(state: SingleDashboardStateType, dashboardId: string) {
+        setCurrentDashboardId(state: SingleDashboardStateType, dashboardId: string) {
             return { ...state, currentDashboardId: dashboardId };
         }
     }
