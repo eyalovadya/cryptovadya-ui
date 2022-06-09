@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { baseColorStyle } from '../../shared/styles';
 import { appSelectors } from '../../state/models/app/selectors';
@@ -10,9 +11,11 @@ type Props = {
 };
 
 const Header = ({ isDarkTheme, toggleTheme }: Props) => {
+    const navigate = useNavigate();
+
     return (
         <Container>
-            <Title>CryptOvadya</Title>
+            <Title onClick={() => navigate('/dashboards')}>CryptOvadya</Title>
             <ThemeBtn onClick={toggleTheme}>
                 {isDarkTheme ? (
                     <span aria-label="Light mode" role="img">
@@ -42,6 +45,8 @@ const Title = styled.div`
     font-size: ${(props) => props.theme.textSize.titleBig};
     font-weight: bold;
     background-image: ${(props) => props.theme.colors.primaryGradient};
+    cursor: pointer;
+    background-clip: text;
     -webkit-background-clip: text;
     -moz-background-clip: text;
     -webkit-text-fill-color: transparent;

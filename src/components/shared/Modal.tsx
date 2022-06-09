@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useRef } from 'react';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ReactPortal from './ReactPortal';
 import { CSSTransition } from 'react-transition-group';
@@ -13,16 +13,20 @@ type FooterProps = {
     };
 };
 type Props = {
-    isOpen: boolean;
+    opened?: boolean;
     title?: string;
     containerProps?: ContainerProps;
     footerProps?: FooterProps;
-    setIsOpen: (isOpen: boolean) => void;
     handleClose?: () => void;
 };
 
-const Modal = ({ children, isOpen, title, containerProps, footerProps, handleClose, setIsOpen }: PropsWithChildren<Props>) => {
+const Modal = ({ children, opened, title, containerProps, footerProps, handleClose }: PropsWithChildren<Props>) => {
     const modalRef = useRef<HTMLDivElement | null>(null);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
+    useEffect(() => {
+        setIsOpen(!!opened);
+    }, [opened]);
 
     useEffect(() => {
         const closeOnEscapeKey = (e: KeyboardEvent) => {
@@ -39,7 +43,7 @@ const Modal = ({ children, isOpen, title, containerProps, footerProps, handleClo
     }, [handleClose, setIsOpen]);
 
     return (
-        <CSSTransition in={isOpen} nodeRef={modalRef} timeout={{ enter: 0, exit: 300 }} mountOnEnter unmountOnExit classNames="modal">
+        <CSSTransition in={isOpen} nodeRef={modalRef} timeout={{ enter: 0, exit: 300 }} classNames="modal">
             <ReactPortal wrapperId="react-portal-modal-container">
                 <ModalWrapper>
                     <Container className="modal" ref={modalRef} {...containerProps}>
@@ -87,14 +91,11 @@ const ModalWrapper = styled.div`
 
     .modal {
         opacity: 0;
-        transition: all 300ms ease-in-out;
+        transition: all 200ms ease-in-out;
     }
 
     .modal-enter-done {
         opacity: 1;
-    }
-    .modal-exit {
-        opacity: 0;
     }
 `;
 

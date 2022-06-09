@@ -4,7 +4,7 @@ import TextInput from '../../../../shared/formInputs/TextInput';
 const CreateDashboardModalContent = () => {
     return (
         <Container>
-            <TextInput label="Dashboard Name" name="dashboardName" />
+            <TextInput label="Dashboard Name" name="dashboardName" autoFocus />
         </Container>
     );
 };

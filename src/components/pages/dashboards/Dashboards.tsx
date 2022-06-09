@@ -6,13 +6,19 @@ import { RootState, Dispatch } from '../../../state/store';
 import { Dashboard } from '../../../types/dashboard';
 import DashboardItem, { DashboardItemStyle } from './components/DashboardItem';
 import PageLayout from '../../shared/PageLayout';
+import { useEffect } from 'react';
 
 type Props = {
     dashboards: Dashboard[];
+    fetchDashboards: () => Promise<void>;
 };
 
-const Dashboards = ({ dashboards }: Props) => {
+const Dashboards = ({ dashboards, fetchDashboards }: Props) => {
     const location = useLocation();
+
+    useEffect(() => {
+        fetchDashboards();
+    }, [fetchDashboards]);
 
     return (
         <PageLayout title="Dashboards">
@@ -32,6 +38,8 @@ const mapState = (state: RootState) => ({
     dashboards: dashboardsSelectors.dashboards(state)
 });
 
-const mapDispatch = (dispatch: Dispatch) => ({});
+const mapDispatch = (dispatch: Dispatch) => ({
+    fetchDashboards: dispatch.dashboards.fetchDashboards
+});
 
 export default connect(mapState, mapDispatch)(Dashboards);

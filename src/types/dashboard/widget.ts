@@ -1,13 +1,16 @@
 export type WidgetType = 'STAT_CARD';
 
-export type StatCardData = {
+export type CryptoPair = {
     baseCurrency: string;
     quoteCurrency: string;
+};
+
+export type StatCardData = CryptoPair & {
     data: number;
     dayDiffPrecent: number;
 };
 
-export type Widget<T extends WidgetType = any> = {
+export type Widget<T extends WidgetType> = {
     id: string;
     dashboardId: string;
     type: T;

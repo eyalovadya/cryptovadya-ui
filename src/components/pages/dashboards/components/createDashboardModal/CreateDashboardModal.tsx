@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../../../shared/Modal';
 import CreateDashboardModalContent from './CreateDashboardModalContent';
@@ -17,16 +16,7 @@ type Props = {
 };
 
 const CreateDashboardModal = ({ createDashboard }: Props) => {
-    const [isOpen, setIsOpen] = useState<boolean>(false);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        setIsOpen(true);
-    }, []);
-
-    const handleClose = () => {
-        navigate('dashboards');
-    };
 
     const initialValues: FormValues = {
         dashboardName: ''
@@ -36,8 +26,7 @@ const CreateDashboardModal = ({ createDashboard }: Props) => {
         await createDashboard({
             title: values.dashboardName
         });
-        navigate('dashboards');
-        setIsOpen(false);
+        navigate(-1);
     };
 
     const validationSchema = Yup.object({
@@ -50,15 +39,14 @@ const CreateDashboardModal = ({ createDashboard }: Props) => {
                 <Form
                     id="new-dashboard-form"
                     onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
+                        if (e.key === 'Enter' && !formik.isSubmitting) {
                             formik.handleSubmit();
                         }
                     }}
                 >
                     <Modal
-                        isOpen={isOpen}
-                        handleClose={handleClose}
-                        setIsOpen={setIsOpen}
+                        opened={true}
+                        handleClose={() => navigate(-1)}
                         title="New Dashboard"
                         containerProps={{
                             width: '400px',

@@ -9,6 +9,8 @@ declare module 'styled-components' {
         cardShadow: string;
         appBackground: string;
         textColor: string;
+        mainButtonColor: string;
+        mainButtonColorHover: string;
         textSize: {
             small: string;
             default: string;

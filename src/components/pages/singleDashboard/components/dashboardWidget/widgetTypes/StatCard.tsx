@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { baseCardStyle } from '../../../../../../shared/styles';
 import { Widget } from '../../../../../../types/dashboard/widget';
+import CoinPair from '../../../../../shared/CoinPair';
 
 type Props = {
     widget: Widget<'STAT_CARD'>;
@@ -17,7 +18,7 @@ const StatCard = ({ widget, subtitle }: Props) => {
         <Container>
             <Content>
                 <Title>
-                    {baseCurrency} / {quoteCurrency}
+                    <CoinPair base={baseCurrency} quote={quoteCurrency} coinSize={20} textSize="16px" />
                 </Title>
                 <DataContainer>
                     <Data>{data}</Data>

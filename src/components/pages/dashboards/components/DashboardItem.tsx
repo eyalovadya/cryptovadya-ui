@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Dashboard } from '../../../../types/dashboard';
 import { baseCardStyle } from '../../../../shared/styles';
+import CoinPair from '../../../shared/CoinPair';
 
 type Props = {
     dashboard: Dashboard;
@@ -10,7 +11,25 @@ const DashboardItem = ({ dashboard }: Props) => {
     return (
         <DashboardItemStyle padding="0">
             <Title>{dashboard.title}</Title>
-            <Content>{!!dashboard.widgets.length ? <Widgets /> : <Empty>Empty</Empty>}</Content>
+            <Content>
+                {!!dashboard.widgets.length ? (
+                    <Widgets>
+                        {dashboard.widgets.map((widget) => {
+                            if (widget.type === 'STAT_CARD') {
+                                const { baseCurrency, quoteCurrency } = widget.data;
+                                return (
+                                    <WidgetWrapper>
+                                        <CoinPair key={widget.id} base={baseCurrency} quote={quoteCurrency} />
+                                    </WidgetWrapper>
+                                );
+                            }
+                            return <WidgetWrapper></WidgetWrapper>;
+                        })}
+                    </Widgets>
+                ) : (
+                    <Empty>Empty</Empty>
+                )}
+            </Content>
         </DashboardItemStyle>
     );
 };
@@ -25,11 +44,29 @@ const Title = styled.div`
 const Content = styled.div`
     flex: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    width: 100%;
+    overflow-y: overlay;
 `;
 
-const Widgets = styled.div``;
+const Widgets = styled.div`
+    height: 100%;
+    width: 100%;
+`;
+
+const WidgetWrapper = styled.div`
+    padding: 8px 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+        background-color: ${(props) => props.theme.input.backgroundColor};
+    }
+`;
 
 const Empty = styled.div``;
 

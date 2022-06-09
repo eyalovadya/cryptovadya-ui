@@ -3,16 +3,17 @@ import styled from 'styled-components';
 
 type Props = {
     label: string;
+    autoFocus?: boolean;
 } & FieldHookConfig<string>;
 
-const TextInput = ({ label, ...props }: Props) => {
+const TextInput = ({ label, autoFocus, ...props }: Props) => {
     const [field, meta] = useField(props);
     const hasError = meta.touched && !!meta.error;
 
     return (
         <Container>
             <label htmlFor={props.id || props.name}>{label}</label>
-            <Input {...field} placeholder={props.placeholder} type={props.type} hasError={hasError} />
+            <Input autoFocus={autoFocus} {...field} placeholder={props.placeholder} type={props.type} hasError={hasError} />
             <ErrorMessage>{hasError ? meta.error : ''}</ErrorMessage>
         </Container>
     );

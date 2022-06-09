@@ -15,33 +15,25 @@ const Button = styled.button<Props>`
     cursor: pointer;
     outline: inherit;
 
-    background: ${(props) => props.theme.colors.primaryGradient};
-    /* color: ${(props) => props.theme.textColor}; */
+    color: ${(props) => props.theme.mainButtonColor};
 
     width: ${(props) => props.width ?? 'auto'};
     height: ${(props) => props.height ?? 'auto'};
     font-size: 16px;
-    margin: 10px;
     border-radius: ${(props) => props.theme.borderRadius};
     font-weight: 500;
 
     ${(props) =>
         props.disabled
             ? css`
-                  background: linear-gradient(0deg, rgb(0 0 0 / 28%), rgb(31 35 43 / 28%)),
-                      linear-gradient(333.68deg, #0965f1 -25.37%, #31d8bf 103.14%);
+                  color: ${(props) => `${props.theme.mainButtonColor}aa`};
                   cursor: not-allowed;
               `
             : css`
                   &:hover {
-                      background: linear-gradient(0deg, rgba(45, 48, 55, 0.2), rgba(45, 48, 55, 0.2)),
-                          linear-gradient(333.68deg, #0965f1 -25.37%, #31d8bf 103.14%);
+                      color: ${(props) => props.theme.mainButtonColorHover};
                   }
               `}
-
-    background-clip: text !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent;
 `;
 
 export default Button;

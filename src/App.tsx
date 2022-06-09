@@ -10,38 +10,69 @@ import { baseColorStyle } from './shared/styles';
 import Dashboards from './components/pages/dashboards/Dashboards';
 import SingleDashboard from './components/pages/singleDashboard/SingleDashboard';
 import CreateDashboardModal from './components/pages/dashboards/components/createDashboardModal/CreateDashboardModal';
+import CreateWidgetModal from './components/pages/singleDashboard/components/createWidgetModal/CreateWidgetModal';
 
 type Props = {
     appTheme: DefaultTheme;
+    isDarkMode: boolean;
 };
 
-const App = ({ appTheme }: Props) => {
+const App = ({ appTheme, isDarkMode }: Props) => {
     const location = useLocation();
     const state = location.state as { backgroundLocation?: Location };
 
     return (
         <ThemeProvider theme={appTheme}>
-            <HeaderWrapper>
-                <Header />
-            </HeaderWrapper>
-            <Content>
-                <Routes location={state?.backgroundLocation || location}>
-                    <Route path="dashboards" element={<Dashboards />} />
-                    <Route path="dashboards/new" element={<CreateDashboardModal />} />
-                    <Route path="dashboards/:dashboardId" element={<SingleDashboard />} />
-                    <Route path="*" element={<Navigate replace to="/dashboards" />} />
-                </Routes>
-
-                {/* Show the modal when a `backgroundLocation` is set */}
-                {state?.backgroundLocation && (
-                    <Routes>
+            <Wrapper isDarkMode={isDarkMode}>
+                <HeaderWrapper>
+                    <Header />
+                </HeaderWrapper>
+                <Content>
+                    <Routes location={state?.backgroundLocation || location}>
+                        <Route path="dashboards" element={<Dashboards />} />
                         <Route path="dashboards/new" element={<CreateDashboardModal />} />
+                        <Route path="dashboards/:dashboardId/widget/new" element={<CreateWidgetModal />} />
+                        <Route path="dashboards/:dashboardId" element={<SingleDashboard />} />
+                        <Route path="*" element={<Navigate replace to="/dashboards" />} />
                     </Routes>
-                )}
-            </Content>
+
+                    {/* Show the modal when a `backgroundLocation` is set */}
+                    {state?.backgroundLocation && (
+                        <Routes>
+                            <Route path="dashboards/new" element={<CreateDashboardModal />} />
+                            <Route path="dashboards/:dashboardId/widget/new" element={<CreateWidgetModal />} />
+                        </Routes>
+                    )}
+                </Content>
+            </Wrapper>
         </ThemeProvider>
     );
 };
+
+type WrapperProps = {
+    isDarkMode: boolean;
+};
+const Wrapper = styled.div<WrapperProps>`
+    ${baseColorStyle}
+    height: 100%;
+    width: 100%;
+
+    *::-webkit-scrollbar {
+        width: 6px;
+        height: 2px;
+
+        right: 2px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: ${(props) => (props.isDarkMode ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)')};
+        border-radius: 5.5px;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        background-color: ${(props) => (props.isDarkMode ? 'rgba(255, 255, 255, 0.36)' : 'rgba(0, 0, 0, 0.36)')};
+    }
+`;
 
 const HeaderWrapper = styled.div`
     height: ${HEADER_HEIGHT};
@@ -55,12 +86,12 @@ const Content = styled.div`
     h1 {
         margin: 0;
     }
-    padding: 0 24px 16px 24px;
     box-sizing: border-box;
 `;
 
 const mapState = (state: RootState) => ({
-    appTheme: appSelectors.appTheme(state)
+    appTheme: appSelectors.appTheme(state),
+    isDarkMode: appSelectors.isDarkTheme(state)
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({});
