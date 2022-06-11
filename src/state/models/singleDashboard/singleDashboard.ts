@@ -2,7 +2,7 @@ import { createModel } from '@rematch/core';
 import { RootModel } from '..';
 
 export type SingleDashboardStateType = {
-    currentDashboardId: string | null;
+    currentDashboardId: number | null;
 };
 
 export const singleDashboard = createModel<RootModel>()({
@@ -10,7 +10,7 @@ export const singleDashboard = createModel<RootModel>()({
         currentDashboardId: null
     } as SingleDashboardStateType,
     reducers: {
-        setCurrentDashboardId(state: SingleDashboardStateType, dashboardId: string) {
+        setCurrentDashboardId(state: SingleDashboardStateType, dashboardId: number) {
             return { ...state, currentDashboardId: dashboardId };
         }
     }

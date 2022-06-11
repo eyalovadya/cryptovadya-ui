@@ -4,9 +4,10 @@ import { Formik, Form, FormikProps } from 'formik';
 import * as Yup from 'yup';
 import Modal from '../../../../shared/Modal';
 import CreateWidgetModalContent from './CreateWidgetModalContent';
-import { CreateDashboardWidgetPayload } from '../../../../../types/dashboards/payloads';
 import { RootState, Dispatch } from '../../../../../state/store';
-import { CryptoPair, WidgetType } from '../../../../../types/dashboards/widget';
+import { WidgetType } from '../../../../../types/widgets';
+import { CryptoPair } from '../../../../../types/widgets/widgetTypesData';
+import { CreateWidgetPayload } from '../../../../../types/widgets/payloads';
 
 type FormValues = {
     widgetType: WidgetType;
@@ -14,11 +15,11 @@ type FormValues = {
 };
 
 type Props = {
-    createWidget: <T extends WidgetType>(payload: CreateDashboardWidgetPayload<T>) => Promise<void>;
+    createWidget: <T extends WidgetType>(payload: CreateWidgetPayload<T>) => Promise<void>;
 };
 
 const CreateWidgetModal = ({ createWidget }: Props) => {
-    const dashboardId = useParams().dashboardId!;
+    const dashboardId = +useParams().dashboardId!;
     const navigate = useNavigate();
 
     const initialValues: FormValues = {
@@ -27,15 +28,18 @@ const CreateWidgetModal = ({ createWidget }: Props) => {
     };
 
     const onSubmit = async (values: FormValues) => {
-        const { baseCurrency, quoteCurrency, baseCurrencyId, baseCurrencyName } = values.cryptoPair!;
+        const { baseCurrency, quoteCurrency, baseCurrencyId } = values.cryptoPair!;
 
         await createWidget<'STAT_CARD'>({
             type: values.widgetType,
             dashboardId,
-            baseCurrency,
-            quoteCurrency,
-            baseCurrencyId,
-            baseCurrencyName
+            data: {
+                baseCurrency,
+                quoteCurrency,
+                baseCurrencyId,
+                data: 0,
+                dayDiffPrecent: 0
+            }
         });
 
         navigate(-1);
@@ -84,7 +88,7 @@ const CreateWidgetModal = ({ createWidget }: Props) => {
 const mapState = (state: RootState) => ({});
 
 const mapDispatch = (dispatch: Dispatch) => ({
-    createWidget: <T extends WidgetType>(payload: CreateDashboardWidgetPayload<T>) => dispatch.dashboards.createWidget(payload)
+    createWidget: <T extends WidgetType>(payload: CreateWidgetPayload<T>) => dispatch.dashboards.createWidget(payload)
 });
 
 export default connect(mapState, mapDispatch)(CreateWidgetModal);

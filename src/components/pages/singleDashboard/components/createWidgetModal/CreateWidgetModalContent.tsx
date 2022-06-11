@@ -3,11 +3,11 @@ import { SelectInput } from '../../../../shared/formInputs';
 import { connect } from 'react-redux';
 import { RootState, Dispatch } from '../../../../../state/store';
 import { appSelectors } from '../../../../../state/models/app/selectors';
-import { CryptoPair } from '../../../../../types/dashboards/widget';
 import { Option } from '../../../../shared/formInputs/SelectInput';
 import { FormatOptionLabelMeta } from 'react-select/dist/declarations/src/Select';
 import CoinPair from '../../../../shared/CoinPair';
 import coinsSelectOptions from '../../../../../static/data/coinsSelectOptions.json';
+import { CryptoPair } from '../../../../../types/widgets/widgetTypesData';
 
 type Props = {
     appTheme: DefaultTheme;

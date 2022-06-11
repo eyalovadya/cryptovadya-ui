@@ -1,10 +1,10 @@
 import { createModel } from '@rematch/core';
-import { v4 as uuidv4 } from 'uuid';
 import { RootModel } from '..';
 import CoinGeckoClient from '../../../services/cryptoAPI/coinGeckoClient';
 import { Dashboard } from '../../../types/dashboards';
-import { CreateDashboardPayload, CreateDashboardWidgetPayload } from '../../../types/dashboards/payloads';
-import { StatCardData, Widget, WidgetType } from '../../../types/dashboards/widget';
+import { CreateDashboardPayload } from '../../../types/dashboards/payloads';
+import { Widget } from '../../../types/widgets';
+import { CreateWidgetPayload } from '../../../types/widgets/payloads';
 
 export type DashboardsStateType = {
     dashboards: Dashboard[];
@@ -43,7 +43,7 @@ export const dashboards = createModel<RootModel>()({
 
             return newState;
         },
-        addWidget<T extends WidgetType>(state: DashboardsStateType, widget: Widget<T>) {
+        addWidget(state: DashboardsStateType, widget: Widget) {
             const dashboardIdx = state.dashboards.findIndex((q) => q.id === widget.dashboardId);
 
             if (dashboardIdx < 0) return state;
@@ -52,7 +52,7 @@ export const dashboards = createModel<RootModel>()({
 
             const newDashboard: Dashboard = { ...newDashboards[dashboardIdx] };
 
-            const newDashboardWidgets: Widget<WidgetType>[] = [...newDashboard.widgets, widget];
+            const newDashboardWidgets: Widget[] = [...newDashboard.widgets, widget];
 
             newDashboard.widgets = newDashboardWidgets;
 
@@ -70,23 +70,29 @@ export const dashboards = createModel<RootModel>()({
             const fetchedDashboards: Dashboard[] = [];
 
             for (let i = 0; i < 3; i++) {
-                const newId = uuidv4();
+                const newId = i;
                 const newDashboard: Dashboard = {
                     id: newId,
+                    userId: 'dsds',
                     widgets: [
                         {
-                            id: uuidv4(),
+                            id: i,
                             type: 'STAT_CARD',
                             dashboardId: newId,
                             data: {
                                 baseCurrency: 'BTC',
+                                baseCurrencyId: 'bitcoin',
                                 quoteCurrency: 'ETH',
                                 data: 13.18,
                                 dayDiffPrecent: 1.21
-                            } as StatCardData
+                            },
+                            createdAt: new Date(),
+                            updatedAt: new Date()
                         }
                     ],
-                    title: `Fetched Dashboard ${i}`
+                    title: `Fetched Dashboard ${i}`,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
                 };
 
                 fetchedDashboards.push(newDashboard);
@@ -94,24 +100,30 @@ export const dashboards = createModel<RootModel>()({
 
             // dispatch.dashboards.setDashboards(fetchedDashboards);
         },
-        async fetchDashboardById(dashboardId: string) {
+        async fetchDashboardById(dashboardId: number) {
             await new Promise((resolve) => setTimeout(resolve, 1000));
             const newDashboard: Dashboard = {
-                id: dashboardId,
+                id: 1,
+                userId: '1sa',
                 widgets: [
                     {
-                        id: uuidv4(),
+                        id: 1,
                         type: 'STAT_CARD',
-                        dashboardId,
+                        dashboardId: 1,
                         data: {
+                            baseCurrencyId: 'bitcoin',
                             baseCurrency: 'BTC',
                             quoteCurrency: 'ETH',
                             data: 13.18,
                             dayDiffPrecent: 1.21
-                        } as StatCardData
+                        },
+                        createdAt: new Date(),
+                        updatedAt: new Date()
                     }
                 ],
-                title: 'Fetched Single Dashboard'
+                title: 'Fetched Single Dashboard',
+                createdAt: new Date(),
+                updatedAt: new Date()
             };
 
             dispatch.dashboards.setSingleDashBoard(newDashboard);
@@ -120,30 +132,35 @@ export const dashboards = createModel<RootModel>()({
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
             const newDashboard: Dashboard = {
-                id: uuidv4(),
+                id: 1,
+                userId: 'kaki',
                 widgets: [],
+                createdAt: new Date(),
+                updatedAt: new Date(),
                 ...payload
             };
 
             dispatch.dashboards.addDashboard(newDashboard);
         },
-        async createWidget<T extends WidgetType>(payload: CreateDashboardWidgetPayload<T>) {
-            const { dashboardId, baseCurrency, quoteCurrency, baseCurrencyId, baseCurrencyName } = payload;
+        async createWidget(payload: CreateWidgetPayload) {
+            const { dashboardId, type, data } = payload;
+            const { baseCurrency, baseCurrencyId, quoteCurrency } = data;
 
             const resp = await CoinGeckoClient.simplePrice([baseCurrencyId], [quoteCurrency]);
 
-            const newWidget: Widget<'STAT_CARD'> = {
-                id: uuidv4(),
+            const newWidget: Widget = {
+                id: 1,
                 dashboardId: dashboardId,
-                type: 'STAT_CARD',
+                type,
                 data: {
                     baseCurrency,
-                    baseCurrencyName,
                     baseCurrencyId,
                     quoteCurrency,
                     data: resp[baseCurrencyId]?.[quoteCurrency.toLowerCase()] || 0,
                     dayDiffPrecent: resp[baseCurrencyId]?.[`${quoteCurrency.toLowerCase()}_24h_change`] || 0
-                }
+                },
+                createdAt: new Date(),
+                updatedAt: new Date()
             };
 
             dispatch.dashboards.addWidget(newWidget);

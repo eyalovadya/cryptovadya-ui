@@ -1,7 +1,10 @@
-import { Dashboard } from '../../../types/dashboards/dashboard';
-import { CreateDashboardPayload } from '../../../types/dashboards/payloads/createDashboard';
+import { CreateDashboardPayload, UpdateDashboardPayload } from '../../../types/dashboards/payloads';
+import { DashboardResponse } from './../../../types/dashboards/responses';
 
 export default interface IDashboards {
-    fetchDashboards: () => Promise<Array<Dashboard>>;
-    createDashboard: (payload: CreateDashboardPayload) => Promise<Dashboard>;
+    fetchDashboards: () => Promise<DashboardResponse[]>;
+    fetchDashboardById: (dashboardId: number) => Promise<DashboardResponse>;
+    createDashboard: (payload: CreateDashboardPayload) => Promise<DashboardResponse>;
+    updateDashboard: (dashboardId: number, payload: UpdateDashboardPayload) => Promise<DashboardResponse>;
+    deleteDashboard: (dashboardId: number) => Promise<DashboardResponse>;
 }

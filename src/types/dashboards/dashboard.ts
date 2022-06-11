@@ -1,8 +1,3 @@
-import { Widget, WidgetType } from './widget';
+import { DashboardResponse } from './responses';
 
-export type Dashboard = {
-    id: string;
-    // userId: string;
-    title: string;
-    widgets: Widget<WidgetType>[];
-};
+export type Dashboard = DashboardResponse;

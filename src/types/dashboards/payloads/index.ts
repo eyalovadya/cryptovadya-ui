@@ -1,3 +1,2 @@
-export type { CreateDashboardPayload } from './createDashboard';
-export type { CreateDashboardWidgetPayload } from './createDashboardWidget';
-export type { CreateStatCardPayload } from './createStatCardPayload';
+export type { CreateDashboardPayload } from './createDashboardPayload';
+export type { UpdateDashboardPayload } from './updateDashboardPayload';

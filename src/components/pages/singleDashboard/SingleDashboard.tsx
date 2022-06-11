@@ -6,20 +6,21 @@ import { RootState, Dispatch } from '../../../state/store';
 import { Dashboard } from '../../../types/dashboards';
 import PageLayout from '../../shared/PageLayout';
 import DashboardWidget from './components/dashboardWidget/DashboardWidget';
+import isInteger from 'lodash/isInteger';
 
 type Props = {
     dashboard?: Dashboard;
-    setCurrentDashboardId: (dashboardId: string) => void;
-    fetchDashboardById: (dashboardId: string) => Promise<void>;
+    setCurrentDashboardId: (dashboardId: number) => void;
+    fetchDashboardById: (dashboardId: number) => Promise<void>;
 };
 const SingleDashboard = ({ dashboard, setCurrentDashboardId, fetchDashboardById }: Props) => {
     const { dashboardId } = useParams();
     const location = useLocation();
 
     useEffect(() => {
-        if (dashboardId) {
-            setCurrentDashboardId(dashboardId);
-            fetchDashboardById(dashboardId);
+        if (dashboardId && isInteger(Number(dashboardId))) {
+            setCurrentDashboardId(+dashboardId);
+            fetchDashboardById(+dashboardId);
         }
     }, [dashboardId, fetchDashboardById, setCurrentDashboardId]);
 
@@ -44,8 +45,8 @@ const mapState = (state: RootState) => ({
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({
-    setCurrentDashboardId: (dashboardId: string) => dispatch.singleDashboard.setCurrentDashboardId(dashboardId),
-    fetchDashboardById: (dashboardId: string) => dispatch.dashboards.fetchDashboardById(dashboardId)
+    setCurrentDashboardId: (dashboardId: number) => dispatch.singleDashboard.setCurrentDashboardId(dashboardId),
+    fetchDashboardById: (dashboardId: number) => dispatch.dashboards.fetchDashboardById(dashboardId)
 });
 
 export default connect(mapState, mapDispatch)(SingleDashboard);

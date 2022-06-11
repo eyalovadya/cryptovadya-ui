@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { baseCardStyle } from '../../../../../../shared/styles';
-import { Widget } from '../../../../../../types/dashboards/widget';
+import { Widget } from '../../../../../../types/widgets';
 import CoinPair from '../../../../../shared/CoinPair';
 
 type Props = {
