@@ -1,6 +1,6 @@
 import { createModel } from '@rematch/core';
 import { RootModel } from '..';
-import { UserInfo } from '../../../types/user';
+import { UserInfo } from '../../../types/users';
 
 export type UserStateType = {
     user: null | UserInfo;

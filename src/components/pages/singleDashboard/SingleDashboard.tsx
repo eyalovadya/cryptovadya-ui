@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { singleDashboardSelectors } from '../../../state/models/singleDashboard/selectors';
 import { RootState, Dispatch } from '../../../state/store';
-import { Dashboard } from '../../../types/dashboard';
+import { Dashboard } from '../../../types/dashboards';
 import PageLayout from '../../shared/PageLayout';
 import DashboardWidget from './components/dashboardWidget/DashboardWidget';
 

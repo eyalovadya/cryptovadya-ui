@@ -1,9 +1,9 @@
 import BaseController from '..';
-import { Dashboard } from '../../../types/dashboard';
-import IDashboard from './IDashboard';
-import { CreateDashboardPayload } from './../../../types/dashboard/payloads/createDashboard';
+import { Dashboard } from '../../../types/dashboards';
+import IDashboards from './IDashboards';
+import { CreateDashboardPayload } from '../../../types/dashboards/payloads/createDashboard';
 
-export default class Task extends BaseController implements IDashboard {
+export default class Dashboards extends BaseController implements IDashboards {
     async fetchDashboards(): Promise<Dashboard[]> {
         const response = await this.client.get('/dashboards');
         return response;

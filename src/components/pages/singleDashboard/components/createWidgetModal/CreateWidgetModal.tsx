@@ -4,9 +4,9 @@ import { Formik, Form, FormikProps } from 'formik';
 import * as Yup from 'yup';
 import Modal from '../../../../shared/Modal';
 import CreateWidgetModalContent from './CreateWidgetModalContent';
-import { CreateDashboardWidgetPayload } from '../../../../../types/dashboard/payloads';
+import { CreateDashboardWidgetPayload } from '../../../../../types/dashboards/payloads';
 import { RootState, Dispatch } from '../../../../../state/store';
-import { CryptoPair, WidgetType } from '../../../../../types/dashboard/widget';
+import { CryptoPair, WidgetType } from '../../../../../types/dashboards/widget';
 
 type FormValues = {
     widgetType: WidgetType;

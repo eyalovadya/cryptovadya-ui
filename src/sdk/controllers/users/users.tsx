@@ -1,10 +1,10 @@
 import BaseController from '..';
-import IAuth from './IAuth';
+import IUsers from './IUsers';
 
 export type loginResponse = {
     token: string;
 };
-export default class Auth extends BaseController implements IAuth {
+export default class Users extends BaseController implements IUsers {
     async login(email: string, password: string) {
         const response: loginResponse = await this.client.post('/auth', JSON.stringify({ email, password }));
         return response;

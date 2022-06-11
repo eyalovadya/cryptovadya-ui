@@ -2,9 +2,9 @@ import { createModel } from '@rematch/core';
 import { v4 as uuidv4 } from 'uuid';
 import { RootModel } from '..';
 import CoinGeckoClient from '../../../services/cryptoAPI/coinGeckoClient';
-import { Dashboard } from '../../../types/dashboard';
-import { CreateDashboardPayload, CreateDashboardWidgetPayload } from '../../../types/dashboard/payloads';
-import { StatCardData, Widget, WidgetType } from '../../../types/dashboard/widget';
+import { Dashboard } from '../../../types/dashboards';
+import { CreateDashboardPayload, CreateDashboardWidgetPayload } from '../../../types/dashboards/payloads';
+import { StatCardData, Widget, WidgetType } from '../../../types/dashboards/widget';
 
 export type DashboardsStateType = {
     dashboards: Dashboard[];

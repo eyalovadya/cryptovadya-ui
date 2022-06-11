@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { baseCardStyle } from '../../../../../../shared/styles';
-import { Widget } from '../../../../../../types/dashboard/widget';
+import { Widget } from '../../../../../../types/dashboards/widget';
 import CoinPair from '../../../../../shared/CoinPair';
 
 type Props = {
@@ -12,7 +12,7 @@ const StatCard = ({ widget, subtitle }: Props) => {
 
     const isDiffPositive = dayDiffPrecent > 0;
     const valueDiff = (data * dayDiffPrecent) / 100;
-    const diffSign = isDiffPositive ? '+' : '-';
+    const diffSign = isDiffPositive ? '+' : '';
 
     return (
         <Container>

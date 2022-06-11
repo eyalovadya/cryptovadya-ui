@@ -3,7 +3,7 @@ import Modal from '../../../../shared/Modal';
 import CreateDashboardModalContent from './CreateDashboardModalContent';
 import { Formik, Form, FormikProps } from 'formik';
 import * as Yup from 'yup';
-import { CreateDashboardPayload } from '../../../../../types/dashboard/payloads';
+import { CreateDashboardPayload } from '../../../../../types/dashboards/payloads';
 import { RootState, Dispatch } from '../../../../../state/store';
 import { connect } from 'react-redux';
 

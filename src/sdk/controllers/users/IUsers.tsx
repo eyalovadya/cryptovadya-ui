@@ -1,6 +1,6 @@
-import { loginResponse } from './auth';
+import { loginResponse } from './users';
 
-export default interface IAuth {
+export default interface IUsers {
     login: (email: string, password: string) => Promise<loginResponse>;
     logout: () => Promise<void>;
 }

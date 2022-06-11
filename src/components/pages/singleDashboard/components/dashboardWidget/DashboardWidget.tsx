@@ -1,4 +1,4 @@
-import { WidgetType, Widget } from '../../../../../types/dashboard/widget';
+import { WidgetType, Widget } from '../../../../../types/dashboards/widget';
 import StatCard from './widgetTypes/StatCard';
 
 type DashboardWidgetProps<T extends WidgetType> = {

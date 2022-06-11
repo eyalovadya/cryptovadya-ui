@@ -1,11 +1,11 @@
 import { localSDK as client } from '../sdk';
-import { loginResponse } from '../sdk/controllers/auth/auth';
+import { loginResponse } from '../sdk/controllers/users/users';
 
 class Authentication {
     private token?: string;
 
     public async Authenticate(username: string, password: string): Promise<loginResponse> {
-        const loginResponse = await client.auth().login(username, password);
+        const loginResponse = await client.users().login(username, password);
 
         if (loginResponse.token) {
             this.SetToken(loginResponse.token);
