@@ -21,7 +21,7 @@ const StatCard = ({ widget, subtitle }: Props) => {
                     <CoinPair base={baseCurrency} quote={quoteCurrency} coinSize={20} textSize="16px" />
                 </Title>
                 <DataContainer>
-                    <Data>{data}</Data>
+                    <Data>{data.toFixed(2)}</Data>
                     <Diff isPositive={isDiffPositive}>
                         {diffSign}
                         {valueDiff.toFixed(2)} ({diffSign}

@@ -27,13 +27,15 @@ const CreateWidgetModal = ({ createWidget }: Props) => {
     };
 
     const onSubmit = async (values: FormValues) => {
-        const { baseCurrency, quoteCurrency } = values.cryptoPair!;
+        const { baseCurrency, quoteCurrency, baseCurrencyId, baseCurrencyName } = values.cryptoPair!;
 
         await createWidget<'STAT_CARD'>({
             type: values.widgetType,
             dashboardId,
             baseCurrency,
-            quoteCurrency
+            quoteCurrency,
+            baseCurrencyId,
+            baseCurrencyName
         });
 
         navigate(-1);

@@ -1,4 +1,3 @@
-import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 import { SelectInput } from '../../../../shared/formInputs';
 import { connect } from 'react-redux';
@@ -8,49 +7,28 @@ import { CryptoPair } from '../../../../../types/dashboard/widget';
 import { Option } from '../../../../shared/formInputs/SelectInput';
 import { FormatOptionLabelMeta } from 'react-select/dist/declarations/src/Select';
 import CoinPair from '../../../../shared/CoinPair';
+import coinsSelectOptions from '../../../../../static/data/coinsSelectOptions.json';
 
 type Props = {
     appTheme: DefaultTheme;
 };
 
+const ITEM_HEIGHT = 20;
+const LIST_ITEMS_VIEW = 5;
+const MAX_DISPLAYED_OPTIONS = 200;
+
 const CreateWidgetModalContent = ({ appTheme }: Props) => {
     return (
         <Container>
             <SelectInput<CryptoPair>
-                options={[
-                    {
-                        value: {
-                            baseCurrency: 'BTC',
-                            quoteCurrency: 'LTC'
-                        },
-                        label: 'BTC / LTC'
-                    },
-                    {
-                        value: {
-                            baseCurrency: 'BTC',
-                            quoteCurrency: 'ETH'
-                        },
-                        label: 'BTC / ETH'
-                    },
-                    {
-                        value: {
-                            baseCurrency: 'ETH',
-                            quoteCurrency: 'LTC'
-                        },
-                        label: 'ETH / LTC'
-                    },
-                    {
-                        value: {
-                            baseCurrency: 'ETH',
-                            quoteCurrency: 'BTC'
-                        },
-                        label: 'ETH / BTC'
-                    }
-                ]}
+                options={coinsSelectOptions as Option<CryptoPair>[]}
                 label="Crypto Pair"
                 name="cryptoPair"
                 appTheme={appTheme}
                 formatOptionLabel={formatCryptoPairOption}
+                windowedListItemHeight={ITEM_HEIGHT}
+                listItemsView={LIST_ITEMS_VIEW}
+                maxDisplayedOptions={MAX_DISPLAYED_OPTIONS}
             />
         </Container>
     );
@@ -58,7 +36,7 @@ const CreateWidgetModalContent = ({ appTheme }: Props) => {
 
 const formatCryptoPairOption = (data: Option<CryptoPair>, formatOptionLabelMeta: FormatOptionLabelMeta<Option<CryptoPair>>) => {
     const { baseCurrency, quoteCurrency } = data.value;
-    return <CoinPair base={baseCurrency} quote={quoteCurrency} coinSize={20} textSize="16px" />;
+    return <CoinPair base={baseCurrency} quote={quoteCurrency} coinSize={20} textSize="16px" height={ITEM_HEIGHT} />;
 };
 
 const Container = styled.div`
