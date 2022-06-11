@@ -1,6 +1,3 @@
-import fetch from 'node-fetch';
-import Authentication from '../../authentication/authentication';
-
 type body = string | ArrayBuffer | ArrayBufferView | NodeJS.ReadableStream | URLSearchParams | FormData | undefined;
 type bodyType = 'JSON' | 'FORM-DATA';
 
@@ -35,10 +32,6 @@ export class ApiClient implements IApiClient {
         this.bodyType = bodyType;
     }
 
-    private setAuthorization() {
-        if (Authentication.GetToken() && !this.headers.Authorization) this.headers.Authorization = 'Bearer ' + Authentication.GetToken();
-    }
-
     get baseUrl() {
         return this._baseUrl;
     }
@@ -60,7 +53,6 @@ export class ApiClient implements IApiClient {
     }
 
     async callRequest(url: string, options?: any) {
-        this.setAuthorization();
         const headers = { ...this.headers };
         if (this.bodyType === 'JSON') headers['Content-Type'] = contentTypes.json;
 
@@ -70,13 +62,13 @@ export class ApiClient implements IApiClient {
 
         this.bodyType = 'JSON';
 
-        if (!response.ok) {
-            const message = await response.text();
+        const data = await response.json();
 
-            throw new Error(message);
+        if (!response.ok) {
+            throw new Error(data.message || 'Error');
         }
 
-        return await response.json();
+        return data;
     }
 
     mergeUrl(url: string) {

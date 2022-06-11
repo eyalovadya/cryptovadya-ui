@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Link from '../../shared/Link';
 import { dashboardsSelectors } from '../../../state/models/dashboards/selectors';
 import { RootState, Dispatch } from '../../../state/store';
-import { Dashboard } from '../../../types/dashboard';
+import { Dashboard } from '../../../types/dashboards';
 import DashboardItem, { DashboardItemStyle } from './components/DashboardItem';
 import PageLayout from '../../shared/PageLayout';
 import { useEffect } from 'react';

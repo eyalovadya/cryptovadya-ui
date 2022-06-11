@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Dashboard } from '../../../../types/dashboard';
+import { Dashboard } from '../../../../types/dashboards';
 import { baseCardStyle } from '../../../../shared/styles';
 import CoinPair from '../../../shared/CoinPair';
 

@@ -1,5 +1,6 @@
-import Auth from './controllers/auth/auth';
-import Task from './controllers/dashboard/dashboard';
+import Users from './controllers/users/users';
+import Dashboards from './controllers/dashboards/dashboards';
+import Widgets from './controllers/widgets/widgets';
 
 class CryptOvadyaSDK {
     private baseUrl: string;
@@ -7,12 +8,15 @@ class CryptOvadyaSDK {
     constructor(baseUrl: string = '') {
         this.baseUrl = baseUrl;
     }
-    auth() {
-        return new Auth(this.baseUrl);
+    users() {
+        return new Users(this.baseUrl);
     }
-    task() {
-        return new Task(this.baseUrl);
+    dashboards() {
+        return new Dashboards(this.baseUrl);
+    }
+    widgets() {
+        return new Widgets(this.baseUrl);
     }
 }
 
-export const localSDK = new CryptOvadyaSDK(`${process.env.REACT_APP_API_URL}/api`);
+export const localSDK = new CryptOvadyaSDK(process.env.REACT_APP_API_URL);

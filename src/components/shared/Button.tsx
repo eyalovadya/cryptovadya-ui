@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 type Props = {
     width?: string;
     height?: string;
+    fontSize?: string;
     disabled?: boolean;
 };
 
@@ -19,7 +20,7 @@ const Button = styled.button<Props>`
 
     width: ${(props) => props.width ?? 'auto'};
     height: ${(props) => props.height ?? 'auto'};
-    font-size: 16px;
+    font-size: ${(props) => props.fontSize ?? '16px'};
     border-radius: ${(props) => props.theme.borderRadius};
     font-weight: 500;
 

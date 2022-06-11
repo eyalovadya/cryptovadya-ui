@@ -52,6 +52,8 @@ const Header = styled.div`
 
 const Title = styled.div`
     font-size: ${(props) => props.theme.textSize.title};
+    display: flex;
+    align-items: baseline;
 `;
 
 const ButtonsContainer = styled.div`
