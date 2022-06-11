@@ -32,7 +32,7 @@ const Input = styled.input<InputProps>`
     outline: none;
     width: 100%;
     padding: 12px 20px;
-    margin: 8px 0;
+    margin-top: 8px;
     box-sizing: border-box;
     border-radius: 14px;
     border: none;
@@ -40,12 +40,17 @@ const Input = styled.input<InputProps>`
     font-size: ${(props) => props.theme.input.fontSize};
     color: ${(props) => props.theme.textColor};
 
-    border: 1px solid ${(props) => (props.hasError ? 'red' : props.theme.input.backgroundColor)}; ;
+    border: 1px solid ${(props) => (props.hasError ? 'red' : props.theme.input.backgroundColor)};
+
+    &:focus {
+        border: 1px solid ${(props) => props.theme.mainButtonColorHover};
+    }
 `;
 
 const ErrorMessage = styled.div`
     color: red;
     height: 16px;
     font-size: ${(props) => props.theme.textSize.small};
+    margin-bottom: 8px;
 `;
 export default TextInput;

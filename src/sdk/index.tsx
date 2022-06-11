@@ -1,5 +1,6 @@
 import Users from './controllers/users/users';
 import Dashboards from './controllers/dashboards/dashboards';
+import Widgets from './controllers/widgets/widgets';
 
 class CryptOvadyaSDK {
     private baseUrl: string;
@@ -12,6 +13,9 @@ class CryptOvadyaSDK {
     }
     dashboards() {
         return new Dashboards(this.baseUrl);
+    }
+    widgets() {
+        return new Widgets(this.baseUrl);
     }
 }
 

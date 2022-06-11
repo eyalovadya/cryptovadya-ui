@@ -13,6 +13,10 @@ const StyledLink = styled(RouterLink)`
     }
 
     color: ${(props) => props.theme.textColor};
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 const Link = (props: LinkProps & React.RefAttributes<HTMLAnchorElement>) => <StyledLink {...props} />;

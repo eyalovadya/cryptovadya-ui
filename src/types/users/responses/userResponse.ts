@@ -1,6 +1,3 @@
-export type UserResponse = {
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-};
+import { User } from '..';
+
+export type UserResponse = User;
