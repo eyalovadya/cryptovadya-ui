@@ -1,8 +1,13 @@
-import { ReactNode } from 'react';
+import React, { ReactNode, useMemo, useState } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 import { FieldHookConfig, useField } from 'formik';
-import Select, { ActionMeta, GroupBase, StylesConfig } from 'react-select';
+import Select, { ActionMeta, GroupBase, StylesConfig, MenuListProps } from 'react-select';
 import { FormatOptionLabelMeta } from 'react-select/dist/declarations/src/Select';
+import { FixedSizeList as List } from 'react-window';
+import escapeRegExp from 'lodash/escapeRegExp';
+
+// default react-select item padding top + bottom;
+const DEFAULT_ITEM_PADDING = 16;
 
 export type Option<T = string> = {
     value: T;
@@ -12,10 +17,22 @@ type Props<T = string> = {
     options: Option<T>[];
     label: string;
     appTheme: DefaultTheme;
+    windowedListItemHeight?: number;
+    listItemsView?: number;
+    maxDisplayedOptions?: number;
     formatOptionLabel?: (data: Option<T>, formatOptionLabelMeta: FormatOptionLabelMeta<Option<T>>) => ReactNode;
 } & FieldHookConfig<T>;
 
-function SelectInput<T = string>({ options, label, appTheme, formatOptionLabel, ...props }: Props<T>) {
+function SelectInput<T = string>({
+    options,
+    label,
+    appTheme,
+    formatOptionLabel,
+    windowedListItemHeight,
+    listItemsView,
+    maxDisplayedOptions,
+    ...props
+}: Props<T>) {
     const [field, meta, { setValue, setTouched }] = useField(props);
     const hasError = meta.touched && !!meta.error;
 
@@ -23,21 +40,77 @@ function SelectInput<T = string>({ options, label, appTheme, formatOptionLabel, 
         if (option?.value) setValue(option.value);
     };
 
+    const [inputValue, setInputValue] = useState<string>('');
+    const filteredOptions = useMemo(() => {
+        if (!inputValue) {
+            return options;
+        }
+
+        const matchByStart = [];
+        const matchByInclusion = [];
+
+        const regByInclusion = new RegExp(escapeRegExp(inputValue), 'i');
+        const regByStart = new RegExp(`^${escapeRegExp(inputValue)}`, 'i');
+
+        for (const option of options) {
+            if (regByInclusion.test(option.label)) {
+                if (regByStart.test(option.label)) {
+                    matchByStart.push(option);
+                } else {
+                    matchByInclusion.push(option);
+                }
+            }
+        }
+
+        return [...matchByStart, ...matchByInclusion];
+    }, [inputValue, options]);
+
+    const slicedOptions = useMemo(
+        () => filteredOptions.slice(0, maxDisplayedOptions || options.length),
+        [filteredOptions, maxDisplayedOptions, options.length]
+    );
     return (
         <Container>
             <label htmlFor={props.id || props.name}>{label}</label>
             <Select
                 styles={selectInputStyles<T>(appTheme, hasError)}
                 defaultValue={options.find((option) => option.value === field.value)}
-                options={options}
+                options={slicedOptions}
                 onChange={onChange}
                 onBlur={(e) => setTouched(true)}
                 formatOptionLabel={formatOptionLabel}
+                components={windowedListItemHeight ? { MenuList: MenuList(windowedListItemHeight) } : undefined}
+                minMenuHeight={0}
+                maxMenuHeight={windowedListItemHeight && listItemsView ? (windowedListItemHeight + DEFAULT_ITEM_PADDING) * listItemsView : undefined}
+                onInputChange={(value) => setInputValue(value)}
+                filterOption={() => true} // disable native filter
             />
             <ErrorMessage>{hasError ? meta.error : ''}</ErrorMessage>
         </Container>
     );
 }
+
+// Windowing the menu list component to improve large lists performance
+const MenuList = (itemHeight: number) =>
+    function <T = string>(props: MenuListProps<Option<T>>) {
+        const heightIncludingPadding = itemHeight + DEFAULT_ITEM_PADDING;
+
+        const { options, children, maxHeight, getValue } = props;
+        const [value] = getValue();
+        const initialOffset = options.indexOf(value) * heightIncludingPadding;
+        const childrenArr = React.Children.toArray(children);
+        return (
+            <List
+                height={maxHeight}
+                width="100%"
+                itemCount={childrenArr.length || 0}
+                itemSize={heightIncludingPadding}
+                initialScrollOffset={initialOffset}
+            >
+                {({ index, style }: any) => <div style={style}>{childrenArr[index]}</div>}
+            </List>
+        );
+    };
 
 const Container = styled.div`
     display: flex;

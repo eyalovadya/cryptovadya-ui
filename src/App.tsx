@@ -14,16 +14,15 @@ import CreateWidgetModal from './components/pages/singleDashboard/components/cre
 
 type Props = {
     appTheme: DefaultTheme;
-    isDarkMode: boolean;
 };
 
-const App = ({ appTheme, isDarkMode }: Props) => {
+const App = ({ appTheme }: Props) => {
     const location = useLocation();
     const state = location.state as { backgroundLocation?: Location };
 
     return (
         <ThemeProvider theme={appTheme}>
-            <Wrapper isDarkMode={isDarkMode}>
+            <Wrapper>
                 <HeaderWrapper>
                     <Header />
                 </HeaderWrapper>
@@ -49,29 +48,10 @@ const App = ({ appTheme, isDarkMode }: Props) => {
     );
 };
 
-type WrapperProps = {
-    isDarkMode: boolean;
-};
-const Wrapper = styled.div<WrapperProps>`
+const Wrapper = styled.div`
     ${baseColorStyle}
     height: 100%;
     width: 100%;
-
-    *::-webkit-scrollbar {
-        width: 6px;
-        height: 2px;
-
-        right: 2px;
-    }
-
-    *::-webkit-scrollbar-thumb {
-        background-color: ${(props) => (props.isDarkMode ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)')};
-        border-radius: 5.5px;
-    }
-
-    *::-webkit-scrollbar-thumb:hover {
-        background-color: ${(props) => (props.isDarkMode ? 'rgba(255, 255, 255, 0.36)' : 'rgba(0, 0, 0, 0.36)')};
-    }
 `;
 
 const HeaderWrapper = styled.div`
@@ -90,8 +70,7 @@ const Content = styled.div`
 `;
 
 const mapState = (state: RootState) => ({
-    appTheme: appSelectors.appTheme(state),
-    isDarkMode: appSelectors.isDarkTheme(state)
+    appTheme: appSelectors.appTheme(state)
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({});

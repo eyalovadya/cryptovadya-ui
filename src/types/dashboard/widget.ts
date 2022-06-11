@@ -1,6 +1,8 @@
 export type WidgetType = 'STAT_CARD';
 
 export type CryptoPair = {
+    baseCurrencyId: string;
+    baseCurrencyName: string;
     baseCurrency: string;
     quoteCurrency: string;
 };

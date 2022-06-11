@@ -1,6 +1,7 @@
 import { createModel } from '@rematch/core';
 import { v4 as uuidv4 } from 'uuid';
 import { RootModel } from '..';
+import CoinGeckoClient from '../../../services/cryptoAPI/coinGeckoClient';
 import { Dashboard } from '../../../types/dashboard';
 import { CreateDashboardPayload, CreateDashboardWidgetPayload } from '../../../types/dashboard/payloads';
 import { StatCardData, Widget, WidgetType } from '../../../types/dashboard/widget';
@@ -127,7 +128,9 @@ export const dashboards = createModel<RootModel>()({
             dispatch.dashboards.addDashboard(newDashboard);
         },
         async createWidget<T extends WidgetType>(payload: CreateDashboardWidgetPayload<T>) {
-            const { dashboardId, baseCurrency, quoteCurrency } = payload;
+            const { dashboardId, baseCurrency, quoteCurrency, baseCurrencyId, baseCurrencyName } = payload;
+
+            const resp = await CoinGeckoClient.simplePrice([baseCurrencyId], [quoteCurrency]);
 
             const newWidget: Widget<'STAT_CARD'> = {
                 id: uuidv4(),
@@ -135,9 +138,11 @@ export const dashboards = createModel<RootModel>()({
                 type: 'STAT_CARD',
                 data: {
                     baseCurrency,
+                    baseCurrencyName,
+                    baseCurrencyId,
                     quoteCurrency,
-                    data: 13.18,
-                    dayDiffPrecent: 1.21
+                    data: resp[baseCurrencyId]?.[quoteCurrency.toLowerCase()] || 0,
+                    dayDiffPrecent: resp[baseCurrencyId]?.[`${quoteCurrency.toLowerCase()}_24h_change`] || 0
                 }
             };
 
