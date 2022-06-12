@@ -23,6 +23,7 @@ const AppRoutes = () => {
                 <Route path="" element={<PublicOutlet />}>
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<Register />} />
+                    <Route path="" element={<Navigate to="/login" />} />
                 </Route>
                 <Route path="*" element={<Navigate replace to="/dashboards" />} />
             </Routes>
