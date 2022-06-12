@@ -1,10 +1,3 @@
-import { WidgetResponse } from '../../widgets/responses';
+import { Dashboard } from './../dashboard';
 
-export type DashboardResponse = {
-    id: number;
-    userId: string;
-    title: string;
-    widgets: WidgetResponse[];
-    createdAt: Date;
-    updatedAt: Date;
-};
+export type DashboardResponse = Dashboard;

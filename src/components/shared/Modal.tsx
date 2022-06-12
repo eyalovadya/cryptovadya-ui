@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { PropsWithChildren, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import ReactPortal from './ReactPortal';
 import { CSSTransition } from 'react-transition-group';
@@ -13,26 +13,20 @@ type FooterProps = {
     };
 };
 type Props = {
-    opened?: boolean;
+    isOpen: boolean;
     title?: string;
     containerProps?: ContainerProps;
     footerProps?: FooterProps;
-    handleClose?: () => void;
+    handleClose: () => void;
 };
 
-const Modal = ({ children, opened, title, containerProps, footerProps, handleClose }: PropsWithChildren<Props>) => {
+const Modal = ({ children, isOpen, title, containerProps, footerProps, handleClose }: PropsWithChildren<Props>) => {
     const modalRef = useRef<HTMLDivElement | null>(null);
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-
-    useEffect(() => {
-        setIsOpen(!!opened);
-    }, [opened]);
 
     useEffect(() => {
         const closeOnEscapeKey = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
                 handleClose?.();
-                setIsOpen(false);
             }
         };
 
@@ -40,19 +34,18 @@ const Modal = ({ children, opened, title, containerProps, footerProps, handleClo
         return () => {
             document.body.removeEventListener('keydown', closeOnEscapeKey);
         };
-    }, [handleClose, setIsOpen]);
+    }, [handleClose]);
 
     return (
-        <CSSTransition in={isOpen} nodeRef={modalRef} timeout={{ enter: 0, exit: 300 }} classNames="modal">
-            <ReactPortal wrapperId="react-portal-modal-container">
-                <ModalWrapper>
-                    <Container className="modal" ref={modalRef} {...containerProps}>
+        <ReactPortal wrapperId="react-portal-modal-container">
+            <CSSTransition in={isOpen} nodeRef={modalRef} timeout={{ enter: 0, exit: 300 }} unmountOnExit classNames="app-modal">
+                <ModalWrapper className="app-modal" ref={modalRef}>
+                    <Container {...containerProps}>
                         <Header>
                             <Title>{title}</Title>
                             <CloseButton
                                 onClick={() => {
                                     handleClose?.();
-                                    setIsOpen(false);
                                 }}
                             >
                                 ✖
@@ -70,34 +63,14 @@ const Modal = ({ children, opened, title, containerProps, footerProps, handleClo
                         )}
                     </Container>
                 </ModalWrapper>
-            </ReactPortal>
-        </CSSTransition>
+            </CSSTransition>
+        </ReactPortal>
     );
 };
 
 export default Modal;
 
-const ModalWrapper = styled.div`
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    z-index: 999;
-    padding: 40px 20px 20px;
-
-    .modal {
-        opacity: 0;
-        transition: all 200ms ease-in-out;
-    }
-
-    .modal-enter-done {
-        opacity: 1;
-    }
-`;
+const ModalWrapper = styled.div``;
 
 type ContainerProps = {
     width?: string;
@@ -132,6 +105,9 @@ const Content = styled.div`
     height: calc(100% - 50px);
     box-sizing: border-box;
     font-size: ${(props) => props.theme.textSize.default};
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
 `;
 const Footer = styled.div`
     padding: 5px 20px;

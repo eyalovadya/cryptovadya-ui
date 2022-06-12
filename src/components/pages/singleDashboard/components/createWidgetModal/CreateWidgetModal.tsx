@@ -8,6 +8,7 @@ import { RootState, Dispatch } from '../../../../../state/store';
 import { WidgetType } from '../../../../../types/widgets';
 import { CryptoPair } from '../../../../../types/widgets/widgetTypesData';
 import { CreateWidgetPayload } from '../../../../../types/widgets/payloads';
+import { useEffect, useState } from 'react';
 
 type FormValues = {
     widgetType: WidgetType;
@@ -19,12 +20,22 @@ type Props = {
 };
 
 const CreateWidgetModal = ({ createWidget }: Props) => {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
     const dashboardId = +useParams().dashboardId!;
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setIsOpen(true);
+    }, []);
 
     const initialValues: FormValues = {
         widgetType: 'STAT_CARD',
         cryptoPair: null
+    };
+
+    const handleClose = () => {
+        setIsOpen(false);
+        navigate(-1);
     };
 
     const onSubmit = async (values: FormValues) => {
@@ -36,13 +47,11 @@ const CreateWidgetModal = ({ createWidget }: Props) => {
             data: {
                 baseCurrency,
                 quoteCurrency,
-                baseCurrencyId,
-                data: 0,
-                dayDiffPrecent: 0
+                baseCurrencyId
             }
         });
 
-        navigate(-1);
+        handleClose();
     };
 
     const validationSchema = Yup.object({
@@ -61,8 +70,8 @@ const CreateWidgetModal = ({ createWidget }: Props) => {
                     }}
                 >
                     <Modal
-                        opened={true}
-                        handleClose={() => navigate(-1)}
+                        isOpen={isOpen}
+                        handleClose={handleClose}
                         title="New Widget"
                         containerProps={{
                             width: '400px',

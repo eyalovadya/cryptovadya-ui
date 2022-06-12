@@ -18,7 +18,7 @@ const DashboardItem = ({ dashboard }: Props) => {
                             if (widget.type === 'STAT_CARD') {
                                 const { baseCurrency, quoteCurrency } = widget.data;
                                 return (
-                                    <WidgetWrapper>
+                                    <WidgetWrapper key={widget.id}>
                                         <CoinPair key={widget.id} base={baseCurrency} quote={quoteCurrency} />
                                     </WidgetWrapper>
                                 );
@@ -39,6 +39,7 @@ const Title = styled.div`
     padding: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 const Content = styled.div`

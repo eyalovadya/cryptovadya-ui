@@ -1,10 +1,10 @@
 import './App.css';
 import styled, { DefaultTheme, ThemeProvider } from 'styled-components';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { RootState, Dispatch } from './state/store';
 import { appSelectors } from './state/models/app/selectors';
 import { HEADER_HEIGHT } from './shared/constants';
-import Header from './components/shared/Header';
+import Header from './components/shared/header/Header';
 import { baseColorStyle } from './shared/styles';
 import { userSelectors } from './state/models/user/selectors';
 import { useEffect, useState } from 'react';
@@ -13,17 +13,17 @@ import AppRoutes from './AppRoutes';
 
 type Props = {
     appTheme: DefaultTheme;
-    isLoadingUser: boolean;
     getMe: () => Promise<void>;
 };
 
-const App = ({ appTheme, isLoadingUser, getMe }: Props) => {
-    const [madeFirstRequest, setMadeFirstRequest] = useState<boolean>(false);
+const App = ({ appTheme, getMe }: Props) => {
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const { error } = useSelector(userSelectors.getUserLoadingState);
 
     useEffect(() => {
         (async () => {
             await getMe();
-            setMadeFirstRequest(true);
+            setIsLoading(false);
         })();
     }, [getMe]);
 
@@ -33,7 +33,7 @@ const App = ({ appTheme, isLoadingUser, getMe }: Props) => {
                 <HeaderWrapper>
                     <Header />
                 </HeaderWrapper>
-                <Content>{!madeFirstRequest || isLoadingUser ? <Loader /> : <AppRoutes />}</Content>
+                <Content>{!error && isLoading ? <Loader /> : <AppRoutes />}</Content>
             </Wrapper>
         </ThemeProvider>
     );
@@ -43,6 +43,8 @@ const Wrapper = styled.div`
     ${baseColorStyle}
     height: 100%;
     width: 100%;
+
+    transition: background-color 0.2s ease;
 `;
 
 const HeaderWrapper = styled.div`
@@ -61,8 +63,7 @@ const Content = styled.div`
 `;
 
 const mapState = (state: RootState) => ({
-    appTheme: appSelectors.appTheme(state),
-    isLoadingUser: userSelectors.isLoadingUser(state)
+    appTheme: appSelectors.appTheme(state)
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({

@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { CreateDashboardPayload } from '../../../../../types/dashboards/payloads';
 import { RootState, Dispatch } from '../../../../../state/store';
 import { connect } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 type FormValues = {
     dashboardName: string;
@@ -16,7 +17,18 @@ type Props = {
 };
 
 const CreateDashboardModal = ({ createDashboard }: Props) => {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
+    useEffect(() => {
+        setIsOpen(true);
+    }, []);
+
     const navigate = useNavigate();
+
+    const handleClose = () => {
+        setIsOpen(false);
+        navigate(-1);
+    };
 
     const initialValues: FormValues = {
         dashboardName: ''
@@ -26,11 +38,11 @@ const CreateDashboardModal = ({ createDashboard }: Props) => {
         await createDashboard({
             title: values.dashboardName
         });
-        navigate(-1);
+        handleClose();
     };
 
     const validationSchema = Yup.object({
-        dashboardName: Yup.string().min(3, 'Must be 3 characters or more').max(50, 'Must be 50 characters or less').required('Required')
+        dashboardName: Yup.string().min(3, 'Must be 3 characters or more').max(60, 'Must be 60 characters or less').required('Required')
     });
 
     return (
@@ -45,8 +57,8 @@ const CreateDashboardModal = ({ createDashboard }: Props) => {
                     }}
                 >
                     <Modal
-                        opened={true}
-                        handleClose={() => navigate(-1)}
+                        isOpen={isOpen}
+                        handleClose={handleClose}
                         title="New Dashboard"
                         containerProps={{
                             width: '400px',
