@@ -9,12 +9,12 @@ export type AppStateType = {
 
 export const app = createModel<RootModel>()({
     state: {
-        theme: 'DARK'
+        theme: window.localStorage.getItem('APP_THEME') || 'DARK'
     } as AppStateType,
     reducers: {
         toggleTheme(state: AppStateType) {
             const newTheme: AppThemeType = state.theme === 'DARK' ? 'LIGHT' : 'DARK';
-
+            window.localStorage.setItem('APP_THEME', newTheme);
             return { ...state, theme: newTheme };
         }
     }

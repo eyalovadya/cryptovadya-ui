@@ -1,10 +1,3 @@
-import { WidgetType, WidgetData } from '..';
+import { Widget, WidgetType } from '..';
 
-export type WidgetResponse<T extends WidgetType = WidgetType> = {
-    id: number;
-    dashboardId: number;
-    type: T;
-    data: WidgetData<T>;
-    createdAt: Date;
-    updatedAt: Date;
-};
+export type WidgetResponse<T extends WidgetType = WidgetType> = Widget<T>;

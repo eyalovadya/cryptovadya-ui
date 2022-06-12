@@ -7,6 +7,7 @@ import { Dashboard } from '../../../types/dashboards';
 import DashboardItem, { DashboardItemStyle } from './components/DashboardItem';
 import PageLayout from '../../shared/PageLayout';
 import { useEffect } from 'react';
+import styled from 'styled-components';
 
 type Props = {
     dashboards: Dashboard[];
@@ -22,18 +23,35 @@ const Dashboards = ({ dashboards, fetchDashboards }: Props) => {
 
     return (
         <PageLayout title="Dashboards">
+            <Link to={`/dashboards/new`} state={{ backgroundLocation: location }}>
+                <NewDashboardContainer>
+                    <NewDashboardText>New Dashboard</NewDashboardText>
+                    <NewDashboardPlus>+</NewDashboardPlus>
+                </NewDashboardContainer>
+            </Link>
             {dashboards.map((dashboard) => (
                 <Link key={dashboard.id} to={`/dashboards/${dashboard.id}`}>
                     <DashboardItem dashboard={dashboard} />
                 </Link>
             ))}
-            <Link to={`/dashboards/new`} state={{ backgroundLocation: location }}>
-                <DashboardItemStyle>New Dashboard +</DashboardItemStyle>
-            </Link>
         </PageLayout>
     );
 };
 
+const NewDashboardContainer = styled(DashboardItemStyle)`
+    border: 1px dashed ${(props) => `${props.theme.mainButtonColor}aa`};
+    display: flex;
+    flex-direction: column;
+`;
+
+const NewDashboardText = styled.div``;
+const NewDashboardPlus = styled.div`
+    font-size: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 100;
+`;
 const mapState = (state: RootState) => ({
     dashboards: dashboardsSelectors.dashboards(state)
 });
