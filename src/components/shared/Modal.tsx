@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ReactPortal from './ReactPortal';
 import { CSSTransition } from 'react-transition-group';
 import Button from './Button';
+import Loader from './Loader';
 
 type FooterProps = {
     submitBtn?: {
@@ -56,7 +57,7 @@ const Modal = ({ children, isOpen, title, containerProps, footerProps, handleClo
                             <Footer>
                                 {footerProps.submitBtn && (
                                     <Button type="submit" form={footerProps.submitBtn.bindedFormId} disabled={footerProps.submitBtn.disabled}>
-                                        {footerProps.submitBtn.loading ? 'loading...' : footerProps.submitBtn.text}
+                                        {footerProps.submitBtn.loading ? <Loader size={40} /> : footerProps.submitBtn.text}
                                     </Button>
                                 )}
                             </Footer>
@@ -110,7 +111,7 @@ const Content = styled.div`
     justify-content: center;
 `;
 const Footer = styled.div`
-    padding: 5px 20px;
+    padding: 5px 25px;
     height: 50px;
     display: flex;
     align-items: center;

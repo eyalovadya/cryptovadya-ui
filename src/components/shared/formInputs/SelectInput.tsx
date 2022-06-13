@@ -37,7 +37,9 @@ function SelectInput<T = string>({
     const hasError = meta.touched && !!meta.error;
 
     const onChange = (option: Option<T> | null, _actionMeta: ActionMeta<Option<T>>) => {
-        if (option?.value) setValue(option.value);
+        if (option?.value) {
+            setValue(option.value);
+        }
     };
 
     const [inputValue, setInputValue] = useState<string>('');
@@ -49,12 +51,13 @@ function SelectInput<T = string>({
         const matchByStart = [];
         const matchByInclusion = [];
 
-        const regByInclusion = new RegExp(escapeRegExp(inputValue), 'i');
-        const regByStart = new RegExp(`^${escapeRegExp(inputValue)}`, 'i');
-
+        const inputValueNoSpaces = inputValue.replaceAll(/\s/g, '');
+        const regByInclusion = new RegExp(escapeRegExp(inputValueNoSpaces), 'i');
+        const regByStart = new RegExp(`^${escapeRegExp(inputValueNoSpaces)}`, 'i');
         for (const option of options) {
-            if (regByInclusion.test(option.label)) {
-                if (regByStart.test(option.label)) {
+            const optionLabelNoSpaces = option.label.replaceAll(/\s/g, '');
+            if (regByInclusion.test(optionLabelNoSpaces)) {
+                if (regByStart.test(optionLabelNoSpaces)) {
                     matchByStart.push(option);
                 } else {
                     matchByInclusion.push(option);

@@ -6,8 +6,10 @@ import { RootState, Dispatch } from '../../../state/store';
 import { Dashboard } from '../../../types/dashboards';
 import DashboardItem, { DashboardItemStyle } from './components/DashboardItem';
 import PageLayout from '../../shared/PageLayout';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import Loader from '../../shared/Loader';
+import PlusIcon from '../../shared/PlusIcon';
 
 type Props = {
     dashboards: Dashboard[];
@@ -16,17 +18,25 @@ type Props = {
 
 const Dashboards = ({ dashboards, fetchDashboards }: Props) => {
     const location = useLocation();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        fetchDashboards();
+        (async () => {
+            await fetchDashboards();
+            setIsLoading(false);
+        })();
     }, [fetchDashboards]);
+
+    if (isLoading) return <Loader />;
 
     return (
         <PageLayout title="Dashboards">
             <Link to={`/dashboards/new`} state={{ backgroundLocation: location }}>
                 <NewDashboardContainer>
                     <NewDashboardText>New Dashboard</NewDashboardText>
-                    <NewDashboardPlus>+</NewDashboardPlus>
+                    <NewDashboardPlus>
+                        <PlusIcon />
+                    </NewDashboardPlus>
                 </NewDashboardContainer>
             </Link>
             {dashboards.map((dashboard) => (
@@ -39,18 +49,22 @@ const Dashboards = ({ dashboards, fetchDashboards }: Props) => {
 };
 
 const NewDashboardContainer = styled(DashboardItemStyle)`
-    border: 1px dashed ${(props) => `${props.theme.mainButtonColor}aa`};
+    border: 1px dashed ${(props) => `${props.theme.colors.primary}aa`};
     display: flex;
     flex-direction: column;
+    @media (max-width: 768px) {
+        width: 150px;
+        height: 150px;
+    }
 `;
 
 const NewDashboardText = styled.div``;
 const NewDashboardPlus = styled.div`
-    font-size: 75px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 100;
+    fill: ${(props) => props.theme.textColor};
+    flex: 1;
 `;
 const mapState = (state: RootState) => ({
     dashboards: dashboardsSelectors.dashboards(state)

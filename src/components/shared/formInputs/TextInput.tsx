@@ -43,7 +43,7 @@ const Input = styled.input<InputProps>`
     border: 1px solid ${(props) => (props.hasError ? 'red' : props.theme.input.backgroundColor)};
 
     &:focus {
-        border: 1px solid ${(props) => props.theme.mainButtonColorHover};
+        border: 1px solid ${(props) => props.theme.colors.primaryHover};
     }
 `;
 
