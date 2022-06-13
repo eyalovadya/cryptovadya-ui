@@ -45,6 +45,7 @@ const Wrapper = styled.div`
     width: 100%;
 
     transition: background-color 0.2s ease;
+    overflow-y: auto;
 `;
 
 const HeaderWrapper = styled.div`

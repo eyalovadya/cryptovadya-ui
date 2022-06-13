@@ -38,8 +38,8 @@ const Menu = styled(MenuInner)`
     ${menuSelector.name} {
         font-size: 0.925rem;
         user-select: none;
-        box-shadow: 0px 0px 5px -1px ${(props) => `${props.theme.mainButtonColor}63`};
-        border: 1px solid ${(props) => `${props.theme.mainButtonColor}63`};
+        box-shadow: 0px 0px 5px -1px ${(props) => `${props.theme.colors.primary}63`};
+        border: 1px solid ${(props) => `${props.theme.colors.primary}63`};
         border-radius: 6px;
         padding: 6px;
         min-width: 10rem;
@@ -62,7 +62,7 @@ const Menu = styled(MenuInner)`
 
     ${menuItemSelector.hover} {
         color: #fff;
-        background-color: ${(props) => `${props.theme.mainButtonColor}aa`};
+        background-color: ${(props) => `${props.theme.colors.primary}aa`};
     }
 
     ${menuDividerSelector.name} {

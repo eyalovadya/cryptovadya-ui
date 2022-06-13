@@ -2,12 +2,15 @@ import styled from 'styled-components';
 import { Dashboard } from '../../../../types/dashboards';
 import { baseCardStyle } from '../../../../shared/styles';
 import CoinPair from '../../../shared/CoinPair';
+import { useMediaQuery } from 'react-responsive';
 
 type Props = {
     dashboard: Dashboard;
 };
 
 const DashboardItem = ({ dashboard }: Props) => {
+    const isMobile = useMediaQuery({ maxWidth: 768 });
+
     return (
         <DashboardItemStyle padding="0">
             <Title>{dashboard.title}</Title>
@@ -19,7 +22,7 @@ const DashboardItem = ({ dashboard }: Props) => {
                                 const { baseCurrency, quoteCurrency } = widget.data;
                                 return (
                                     <WidgetWrapper key={widget.id}>
-                                        <CoinPair key={widget.id} base={baseCurrency} quote={quoteCurrency} />
+                                        <CoinPair key={widget.id} base={baseCurrency} quote={quoteCurrency} coinSize={isMobile ? 15 : 20} />
                                     </WidgetWrapper>
                                 );
                             }
@@ -79,6 +82,11 @@ export const DashboardItemStyle = styled.div<DashboardItemStyleProps>`
     cursor: pointer;
     width: 190px;
     height: 190px;
+    @media (max-width: 768px) {
+        width: 150px;
+        height: 150px;
+        font-size: ${(props) => props.theme.textSize.small};
+    }
     padding: ${(props) => props.padding ?? '20px'};
     box-sizing: border-box;
     display: flex;

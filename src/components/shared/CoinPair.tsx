@@ -25,6 +25,9 @@ const Cointainer = styled.div<ContainerProps>`
     display: flex;
     align-items: center;
     font-size: ${(props) => props.textSize || props.theme.textSize.default};
+    @media (max-width: 768px) {
+        font-size: ${(props) => props.textSize || props.theme.textSize.small};
+    }
     height: ${(props) => (props.height ? `${props.height}px` : 'auto')};
     text-align: center;
     box-sizing: border-box;

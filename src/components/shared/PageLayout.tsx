@@ -24,12 +24,12 @@ const PageContainer = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
 `;
 
 const ContentWrapper = styled.div`
     flex: 1;
-    overflow-y: auto;
-    padding: 0 24px;
+    padding: 10px 24px 16px 24px;
     padding-bottom: 16px;
 `;
 
@@ -38,7 +38,6 @@ const Content = styled.div`
     flex-wrap: wrap;
     gap: 20px;
     padding-bottom: 8px;
-    overflow-y: auto;
 
     @media (max-width: 768px) {
         justify-content: center;

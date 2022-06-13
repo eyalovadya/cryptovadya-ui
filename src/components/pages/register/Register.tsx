@@ -54,7 +54,7 @@ const Register = ({ register }: Props) => {
                             {!!error && <ErrorMessage>{(error as Error).message}</ErrorMessage>}
                             <ButtonContainer>
                                 <Button type="submit" disabled={!formik.isValid || formik.isSubmitting} fontSize="20px">
-                                    {loading ? <Loader /> : 'Register'}
+                                    {loading ? <Loader size={45} /> : 'Register'}
                                 </Button>
                             </ButtonContainer>
 
@@ -86,6 +86,7 @@ const RegisterFormContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 1;
 
     .form-container {
         width: 70%;
