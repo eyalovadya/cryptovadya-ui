@@ -1,23 +1,33 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from '../../../../shared/Modal';
-import CreateDashboardModalContent from './CreateDashboardModalContent';
+import DashboardFormModalContent from './DashboardFormModalContent';
 import { Formik, Form, FormikProps } from 'formik';
 import * as Yup from 'yup';
-import { CreateDashboardPayload } from '../../../../../types/dashboards/payloads';
+import { CreateDashboardPayload, UpdateDashboardPayload } from '../../../../../types/dashboards/payloads';
 import { RootState, Dispatch } from '../../../../../state/store';
 import { connect } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { Dashboard } from '../../../../../types/dashboards';
 
 type FormValues = {
     dashboardName: string;
 };
 
+export enum DashboardFormMode {
+    NEW,
+    EDIT
+}
 type Props = {
+    mode: DashboardFormMode;
     createDashboard: (payload: CreateDashboardPayload) => Promise<void>;
+    updateDashboard: (payload: UpdateDashboardPayload) => Promise<void>;
 };
 
-const CreateDashboardModal = ({ createDashboard }: Props) => {
+const DashboardFormModal = ({ mode = DashboardFormMode.NEW, createDashboard, updateDashboard }: Props) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const location = useLocation();
+    const dashboard = (location.state as { dashboard?: Dashboard }).dashboard;
+    const isEdit = mode === DashboardFormMode.EDIT && dashboard;
 
     useEffect(() => {
         setIsOpen(true);
@@ -31,19 +41,30 @@ const CreateDashboardModal = ({ createDashboard }: Props) => {
     };
 
     const initialValues: FormValues = {
-        dashboardName: ''
+        dashboardName: isEdit ? dashboard.title : ''
     };
 
     const onSubmit = async (values: FormValues) => {
-        await createDashboard({
-            title: values.dashboardName
-        });
+        if (isEdit) {
+            await updateDashboard({
+                dashboardId: dashboard.id,
+                title: values.dashboardName
+            });
+        } else {
+            await createDashboard({
+                title: values.dashboardName
+            });
+        }
+
         handleClose();
     };
 
     const validationSchema = Yup.object({
         dashboardName: Yup.string().min(3, 'Must be 3 characters or more').max(60, 'Must be 60 characters or less').required('Required')
     });
+
+    const modalTitle = `${isEdit ? 'Edit' : 'New'} Dashboard`;
+    const submitText = isEdit ? 'Update' : 'Create';
 
     return (
         <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
@@ -59,7 +80,7 @@ const CreateDashboardModal = ({ createDashboard }: Props) => {
                     <Modal
                         isOpen={isOpen}
                         handleClose={handleClose}
-                        title="New Dashboard"
+                        title={modalTitle}
                         containerProps={{
                             width: '400px',
                             height: '250px'
@@ -67,13 +88,13 @@ const CreateDashboardModal = ({ createDashboard }: Props) => {
                         footerProps={{
                             submitBtn: {
                                 bindedFormId: 'new-dashboard-form',
-                                text: 'Create',
+                                text: submitText,
                                 loading: formik.isSubmitting,
                                 disabled: !formik.isValid || !formik.dirty
                             }
                         }}
                     >
-                        <CreateDashboardModalContent />
+                        <DashboardFormModalContent />
                     </Modal>
                 </Form>
             )}
@@ -84,7 +105,8 @@ const CreateDashboardModal = ({ createDashboard }: Props) => {
 const mapState = (state: RootState) => ({});
 
 const mapDispatch = (dispatch: Dispatch) => ({
-    createDashboard: (payload: CreateDashboardPayload) => dispatch.dashboards.createDashboard(payload)
+    createDashboard: (payload: CreateDashboardPayload) => dispatch.dashboards.createDashboard(payload),
+    updateDashboard: (payload: UpdateDashboardPayload) => dispatch.dashboards.updateDashboard(payload)
 });
 
-export default connect(mapState, mapDispatch)(CreateDashboardModal);
+export default connect(mapState, mapDispatch)(DashboardFormModal);

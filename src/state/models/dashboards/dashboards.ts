@@ -1,9 +1,9 @@
 import { createModel } from '@rematch/core';
 import { RootModel } from '..';
 import { Dashboard } from '../../../types/dashboards';
-import { CreateDashboardPayload } from '../../../types/dashboards/payloads';
+import { CreateDashboardPayload, UpdateDashboardPayload } from '../../../types/dashboards/payloads';
 import { Widget } from '../../../types/widgets';
-import { CreateWidgetPayload } from '../../../types/widgets/payloads';
+import { CreateWidgetPayload, DeleteWidgetPayload } from '../../../types/widgets/payloads';
 import { localSDK as client } from '../../../sdk';
 
 export type DashboardsStateType = {
@@ -43,8 +43,43 @@ export const dashboards = createModel<RootModel>()({
 
             return newState;
         },
+        removeDashboard(state: DashboardsStateType, dashboardId: number) {
+            const currentDashboards = state.dashboards;
+
+            const newDashboards: Dashboard[] = [...currentDashboards];
+
+            const dashboardIdx = newDashboards.findIndex((dashboard) => dashboard.id === dashboardId);
+            if (dashboardIdx > -1) {
+                newDashboards.splice(dashboardIdx, 1);
+            }
+
+            const newState: DashboardsStateType = {
+                ...state,
+                dashboards: newDashboards
+            };
+
+            return newState;
+        },
+        editDashboard(state: DashboardsStateType, { dashboardId, title }: UpdateDashboardPayload) {
+            const currentDashboards = state.dashboards;
+
+            const newDashboards: Dashboard[] = [...currentDashboards];
+
+            const dashboardIdx = newDashboards.findIndex((dashboard) => dashboard.id === dashboardId);
+
+            if (dashboardIdx < 0) return state;
+
+            newDashboards[dashboardIdx].title = title;
+
+            const newState: DashboardsStateType = {
+                ...state,
+                dashboards: newDashboards
+            };
+
+            return newState;
+        },
         addWidget(state: DashboardsStateType, widget: Widget) {
-            const dashboardIdx = state.dashboards.findIndex((q) => q.id === widget.dashboardId);
+            const dashboardIdx = state.dashboards.findIndex((dashboard) => dashboard.id === widget.dashboardId);
 
             if (dashboardIdx < 0) return state;
 
@@ -55,6 +90,31 @@ export const dashboards = createModel<RootModel>()({
             const newDashboardWidgets: Widget[] = [...newDashboard.widgets, widget];
 
             newDashboard.widgets = newDashboardWidgets;
+
+            newDashboards[dashboardIdx] = newDashboard;
+
+            const newState: DashboardsStateType = { ...state, dashboards: newDashboards };
+
+            return newState;
+        },
+        removeWidget(state: DashboardsStateType, { widgetId, dashboardId }: DeleteWidgetPayload) {
+            const dashboardIdx = state.dashboards.findIndex((dashboard) => dashboard.id === dashboardId);
+
+            if (dashboardIdx < 0) return state;
+
+            const newDashboards: Dashboard[] = [...state.dashboards];
+
+            const newDashboard: Dashboard = { ...newDashboards[dashboardIdx] };
+
+            const newWidgets: Widget[] = [...newDashboard.widgets];
+
+            newDashboard.widgets = newWidgets;
+
+            const widgetIdx = newWidgets.findIndex((widget) => widget.id === widgetId);
+
+            if (widgetIdx > -1) {
+                newWidgets.splice(widgetIdx, 1);
+            }
 
             newDashboards[dashboardIdx] = newDashboard;
 
@@ -76,9 +136,21 @@ export const dashboards = createModel<RootModel>()({
             const newDashboard = await client.dashboards().createDashboard(payload);
             dispatch.dashboards.addDashboard(newDashboard);
         },
+        async updateDashboard(payload: UpdateDashboardPayload) {
+            await client.dashboards().updateDashboard(payload);
+            dispatch.dashboards.editDashboard(payload);
+        },
         async createWidget(payload: CreateWidgetPayload) {
             const newWidget = await client.widgets().createWidget(payload);
             dispatch.dashboards.addWidget(newWidget);
+        },
+        async deleteDashboard(dashboardId: number) {
+            await client.dashboards().deleteDashboard(dashboardId);
+            dispatch.dashboards.removeDashboard(dashboardId);
+        },
+        async deleteWidget(payload: DeleteWidgetPayload) {
+            await client.widgets().deleteWidget(payload);
+            dispatch.dashboards.removeWidget(payload);
         }
     })
 });

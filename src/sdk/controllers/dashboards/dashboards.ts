@@ -4,28 +4,30 @@ import { CreateDashboardPayload, UpdateDashboardPayload } from '../../../types/d
 import { DashboardResponse } from './../../../types/dashboards/responses';
 
 export default class Dashboards extends BaseController implements IDashboards {
+    private readonly baseEndpoint = '/dashboards';
+
     async fetchDashboards(): Promise<DashboardResponse[]> {
-        const response: DashboardResponse[] = await this.client.get('/dashboards');
+        const response: DashboardResponse[] = await this.client.get(this.baseEndpoint);
         return response;
     }
 
     async fetchDashboardById(dashboardId: number): Promise<DashboardResponse> {
-        const response: DashboardResponse = await this.client.get(`/dashboards/${dashboardId}`);
+        const response: DashboardResponse = await this.client.get(`${this.baseEndpoint}/${dashboardId}`);
         return response;
     }
 
     async createDashboard(payload: CreateDashboardPayload): Promise<DashboardResponse> {
-        const response: DashboardResponse = await this.client.post('/dashboards', JSON.stringify(payload));
+        const response: DashboardResponse = await this.client.post(this.baseEndpoint, JSON.stringify(payload));
         return response;
     }
 
-    async updateDashboard(dashboardId: number, payload: UpdateDashboardPayload): Promise<DashboardResponse> {
-        const response: DashboardResponse = await this.client.put(`/dashboards/${dashboardId}`, JSON.stringify(payload));
+    async updateDashboard({ dashboardId, title }: UpdateDashboardPayload): Promise<DashboardResponse> {
+        const response: DashboardResponse = await this.client.put(`${this.baseEndpoint}/${dashboardId}`, JSON.stringify({ title }));
         return response;
     }
 
     async deleteDashboard(dashboardId: number): Promise<DashboardResponse> {
-        const response: DashboardResponse = await this.client.delete(`/dashboards/${dashboardId}`);
+        const response: DashboardResponse = await this.client.delete(`${this.baseEndpoint}/${dashboardId}`);
         return response;
     }
 }

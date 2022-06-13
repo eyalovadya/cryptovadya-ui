@@ -19,7 +19,9 @@ export const lightTheme: DefaultTheme = {
         primary: '#148be0',
         secondary: '#0965f1',
         primaryGradient: 'linear-gradient(333.68deg,#0965f1 -25.37%,#31d8bf 103.14%)',
-        primaryHover: '#1696f2'
+        primaryHover: '#1696f2',
+        delete: '#db5757',
+        deleteHover: '#ea3535'
     },
     input: {
         backgroundColor: '#c2d0e6',
@@ -38,7 +40,9 @@ export const darkTheme: DefaultTheme = {
         primary: '#31d8bf',
         secondary: '#0965f1',
         primaryGradient: 'linear-gradient(333.68deg,#0965f1 -25.37%,#31d8bf 103.14%)',
-        primaryHover: '#35eacf'
+        primaryHover: '#35eacf',
+        delete: '#db5757',
+        deleteHover: '#ea3535'
     },
     input: {
         backgroundColor: '#697079',

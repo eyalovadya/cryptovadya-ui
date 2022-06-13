@@ -8,9 +8,14 @@ import Loader from './Loader';
 type FooterProps = {
     submitBtn?: {
         text: string;
-        bindedFormId: string;
+        bindedFormId?: string;
         loading?: boolean;
         disabled?: boolean;
+        onClick?: () => Promise<void>;
+    };
+    cancelBtn?: {
+        text: string;
+        onClick?: () => Promise<void>;
     };
 };
 type Props = {
@@ -23,6 +28,7 @@ type Props = {
 
 const Modal = ({ children, isOpen, title, containerProps, footerProps, handleClose }: PropsWithChildren<Props>) => {
     const modalRef = useRef<HTMLDivElement | null>(null);
+    const { submitBtn, cancelBtn } = footerProps || {};
 
     useEffect(() => {
         const closeOnEscapeKey = (e: KeyboardEvent) => {
@@ -55,9 +61,19 @@ const Modal = ({ children, isOpen, title, containerProps, footerProps, handleClo
                         <Content>{children}</Content>
                         {footerProps && (
                             <Footer>
-                                {footerProps.submitBtn && (
-                                    <Button type="submit" form={footerProps.submitBtn.bindedFormId} disabled={footerProps.submitBtn.disabled}>
-                                        {footerProps.submitBtn.loading ? <Loader size={40} /> : footerProps.submitBtn.text}
+                                {cancelBtn && (
+                                    <Button type="button" onClick={cancelBtn.onClick} delete style={{ marginRight: 15 }}>
+                                        {cancelBtn.text}
+                                    </Button>
+                                )}
+                                {submitBtn && (
+                                    <Button
+                                        type={submitBtn.bindedFormId ? 'submit' : 'button'}
+                                        form={submitBtn.bindedFormId}
+                                        disabled={submitBtn.disabled}
+                                        onClick={submitBtn.onClick}
+                                    >
+                                        {submitBtn.loading ? <Loader size={40} /> : submitBtn.text}
                                     </Button>
                                 )}
                             </Footer>
@@ -109,6 +125,7 @@ const Content = styled.div`
     display: flex;
     flex-flow: column;
     justify-content: center;
+    max-width: 100%;
 `;
 const Footer = styled.div`
     padding: 5px 25px;

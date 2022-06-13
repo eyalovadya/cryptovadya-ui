@@ -10,15 +10,18 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Loader from '../../shared/Loader';
 import PlusIcon from '../../shared/svgIcons/PlusIcon';
+import AreYouSureModal from '../../shared/AreYouSureModal';
 
 type Props = {
     dashboards: Dashboard[];
     fetchDashboards: () => Promise<void>;
+    deleteDashboard: (dashboardId: number) => Promise<void>;
 };
 
-const Dashboards = ({ dashboards, fetchDashboards }: Props) => {
+const Dashboards = ({ dashboards, fetchDashboards, deleteDashboard }: Props) => {
     const location = useLocation();
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [dashboardToDelete, setDashboardToDelete] = useState<Dashboard | null>(null);
 
     useEffect(() => {
         (async () => {
@@ -40,11 +43,24 @@ const Dashboards = ({ dashboards, fetchDashboards }: Props) => {
                         </NewDashboardPlus>
                     </NewDashboardContainer>
                 </Link>
+
                 {dashboards.map((dashboard) => (
-                    <Link key={dashboard.id} to={`/dashboards/${dashboard.id}`}>
-                        <DashboardItem dashboard={dashboard} />
+                    // Used onContextMenu e.preventDefault() to prevent mobile menu from open on hold
+                    <Link key={dashboard.id} to={`/dashboards/${dashboard.id}`} onContextMenu={(e) => e.preventDefault()}>
+                        <DashboardItem dashboard={dashboard} onDeleteDashboard={async () => await setDashboardToDelete(dashboard)} />
                     </Link>
                 ))}
+
+                <AreYouSureModal
+                    isOpen={!!dashboardToDelete}
+                    setIsOpen={(isOpen: boolean) => setDashboardToDelete(isOpen ? dashboardToDelete : null)}
+                    approve={async () => await deleteDashboard(dashboardToDelete!.id)}
+                >
+                    <AreYouSureModalContent>
+                        <div>Delete</div>
+                        <DeleteDashboardTitle>{dashboardToDelete?.title}</DeleteDashboardTitle> ?
+                    </AreYouSureModalContent>
+                </AreYouSureModal>
             </Container>
         </PageLayout>
     );
@@ -73,6 +89,20 @@ const NewDashboardContainer = styled(DashboardItemStyle)`
 
 const NewDashboardText = styled.div``;
 
+const AreYouSureModalContent = styled.div`
+    display: flex;
+`;
+
+const DeleteDashboardTitle = styled.span`
+    color: ${(props) => props.theme.colors.primary};
+    display: inline-block;
+    width: fit-content;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    margin: 0 5px;
+`;
+
 const NewDashboardPlus = styled.div`
     display: flex;
     align-items: center;
@@ -85,7 +115,8 @@ const mapState = (state: RootState) => ({
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({
-    fetchDashboards: dispatch.dashboards.fetchDashboards
+    fetchDashboards: dispatch.dashboards.fetchDashboards,
+    deleteDashboard: (dashboardId: number) => dispatch.dashboards.deleteDashboard(dashboardId)
 });
 
 export default connect(mapState, mapDispatch)(Dashboards);

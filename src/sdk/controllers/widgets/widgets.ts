@@ -4,13 +4,15 @@ import { CreateWidgetPayload, DeleteWidgetPayload } from './../../../types/widge
 import { WidgetResponse } from '../../../types/widgets/responses';
 
 export default class Widgets extends BaseController implements IWidgets {
+    private readonly baseEndpoint = '/widgets';
+
     async createWidget(payload: CreateWidgetPayload): Promise<WidgetResponse> {
-        const response: WidgetResponse = await this.client.post('/widgets', JSON.stringify(payload));
+        const response: WidgetResponse = await this.client.post(this.baseEndpoint, JSON.stringify(payload));
         return response;
     }
 
-    async deleteWidget(widgetId: number, payload: DeleteWidgetPayload): Promise<WidgetResponse> {
-        const response: WidgetResponse = await this.client.post(`/widgets/${widgetId}`, JSON.stringify(payload));
+    async deleteWidget({ dashboardId, widgetId }: DeleteWidgetPayload): Promise<WidgetResponse> {
+        const response: WidgetResponse = await this.client.delete(`${this.baseEndpoint}/${widgetId}`, JSON.stringify({ dashboardId }));
         return response;
     }
 }
