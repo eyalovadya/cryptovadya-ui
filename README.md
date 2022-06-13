@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# CryptOvadya UI
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Link: [https://www.cryptovadya.com](cryptovadya.com)
 
 ## Available Scripts
 
