@@ -1,18 +1,13 @@
 import styled from 'styled-components';
-import PageHeader, { PageHeaderActionButtonType } from '../shared/PageHeader';
+import PageHeader, { PageHeaderProps } from '../shared/PageHeader';
 
-type Props = {
+type Props = PageHeaderProps & {
     title: string;
-    children: React.ReactNode;
-    goBackPath?: string;
-    actionButtons?: PageHeaderActionButtonType[];
 };
-const PageLayout = ({ title, children, actionButtons, goBackPath }: Props) => {
+const PageLayout = ({ title, children, ...headerProps }: Props) => {
     return (
         <PageContainer>
-            <PageHeader actionButtons={actionButtons} goBackPath={goBackPath}>
-                {title}
-            </PageHeader>
+            <PageHeader {...headerProps}>{title}</PageHeader>
             <ContentWrapper>
                 <Content>{children}</Content>
             </ContentWrapper>

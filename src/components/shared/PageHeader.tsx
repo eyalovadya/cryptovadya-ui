@@ -6,16 +6,20 @@ import Link from './Link';
 import { LinkProps } from 'react-router-dom';
 
 export type PageHeaderActionButtonType = ComponentProps<typeof Button> & { text: string; link?: LinkProps };
-type Props = {
-    children: string;
+
+export type PageHeaderProps = {
+    children: React.ReactNode;
+    icon?: React.ReactElement;
     goBackPath?: string;
     actionButtons?: PageHeaderActionButtonType[];
 };
-const PageHeader = ({ children, actionButtons, goBackPath }: Props) => {
+
+const PageHeader = ({ children, icon, actionButtons, goBackPath }: PageHeaderProps) => {
     return (
         <Header>
             <TitleContainer>
                 <Title>{children}</Title>
+                {icon}
                 {goBackPath && (
                     <Link to={goBackPath}>
                         <Button style={{ fontSize: 12, margin: '0 10px' }}>{'Go Back'}</Button>
@@ -62,10 +66,12 @@ const TitleContainer = styled.div`
     align-items: baseline;
     max-width: 60%;
 `;
+
 const Title = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    align-items: baseline;
 `;
 
 const ButtonsContainer = styled.div`

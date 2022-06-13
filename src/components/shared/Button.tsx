@@ -4,6 +4,7 @@ type Props = {
     width?: string;
     height?: string;
     fontSize?: string;
+    delete?: boolean;
     disabled?: boolean;
 };
 
@@ -16,7 +17,7 @@ const Button = styled.button<Props>`
     cursor: pointer;
     outline: inherit;
 
-    color: ${(props) => props.theme.colors.primary};
+    color: ${(props) => props.color || props.theme.colors[props.delete ? 'delete' : 'primary']};
 
     width: ${(props) => props.width ?? 'auto'};
     height: ${(props) => props.height ?? 'auto'};
@@ -28,12 +29,12 @@ const Button = styled.button<Props>`
     ${(props) =>
         props.disabled
             ? css`
-                  color: ${(props) => `${props.theme.colors.primary}aa`};
+                  color: ${props.theme.colors[props.delete ? 'delete' : 'primary']}aa;
                   cursor: default;
               `
             : css`
                   &:hover {
-                      color: ${(props) => props.theme.colors.primaryHover};
+                      color: ${props.theme.colors[props.delete ? 'deleteHover' : 'primaryHover']};
                   }
               `}
 `;

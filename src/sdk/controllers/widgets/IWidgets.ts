@@ -3,5 +3,5 @@ import { WidgetResponse } from '../../../types/widgets/responses';
 
 export default interface IWidgets {
     createWidget: (payload: CreateWidgetPayload) => Promise<WidgetResponse>;
-    deleteWidget: (widgetId: number, payload: DeleteWidgetPayload) => Promise<WidgetResponse>;
+    deleteWidget: (payload: DeleteWidgetPayload) => Promise<WidgetResponse>;
 }

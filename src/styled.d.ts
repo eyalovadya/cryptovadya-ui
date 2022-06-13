@@ -20,6 +20,8 @@ declare module 'styled-components' {
             secondary: string;
             primaryGradient: string;
             primaryHover: string;
+            delete: string;
+            deleteHover: string;
         };
         input: {
             backgroundColor: string;
