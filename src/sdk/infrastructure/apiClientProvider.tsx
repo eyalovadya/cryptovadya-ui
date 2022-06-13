@@ -1,21 +1,6 @@
-type body = string | ArrayBuffer | ArrayBufferView | NodeJS.ReadableStream | URLSearchParams | FormData | undefined;
-type bodyType = 'JSON' | 'FORM-DATA';
-
-export type headersType = {
-    'Content-Type'?: string;
-    Authorization?: string;
-};
-
-export const contentTypes = {
-    urlencoded: 'application/x-www-form-urlencoded',
-    json: 'application/json'
-};
-
 export class ApiClient implements IApiClient {
     private static instance: ApiClient;
     private _baseUrl: string;
-    private bodyType: bodyType = 'JSON';
-    headers: headersType = {};
 
     private constructor(baseUrl: string) {
         this._baseUrl = baseUrl;
@@ -28,10 +13,6 @@ export class ApiClient implements IApiClient {
         return this.instance;
     }
 
-    public setBodyType(bodyType: bodyType) {
-        this.bodyType = bodyType;
-    }
-
     get baseUrl() {
         return this._baseUrl;
     }
@@ -40,23 +21,22 @@ export class ApiClient implements IApiClient {
         return await this.callRequest(url, { method: 'GET' });
     }
 
-    async post(url: string, body?: body) {
+    async post(url: string, body?: BodyInit) {
         return await this.callRequest(url, { method: 'POST', body });
     }
 
-    async put(url: string, body?: body) {
+    async put(url: string, body?: BodyInit) {
         return await this.callRequest(url, { method: 'PUT', body });
     }
 
-    async delete(url: string, body?: body) {
+    async delete(url: string, body?: BodyInit) {
         return await this.callRequest(url, { method: 'DELETE', body });
     }
 
-    async callRequest(url: string, options?: any) {
-        const headers = { ...this.headers };
-        if (this.bodyType === 'JSON') headers['Content-Type'] = contentTypes.json;
+    async callRequest(url: string, options?: RequestInit) {
+        const headers: HeadersInit = { 'Content-Type': 'application/json' };
 
-        const requestOptions = { ...options, headers, credentials: 'include' };
+        const requestOptions: RequestInit = { ...options, headers, credentials: 'include' };
 
         const response = await fetch(this.mergeUrl(url), requestOptions);
 
@@ -76,11 +56,9 @@ export class ApiClient implements IApiClient {
 
 export interface IApiClient {
     baseUrl: string;
-    headers: headersType;
     get: (url: string) => Promise<any>;
-    post: (url: string, body?: body) => Promise<any>;
-    put: (url: string, body?: body) => Promise<any>;
-    delete: (url: string, body?: body) => Promise<any>;
-    setBodyType: (bodyType: bodyType) => void;
-    callRequest(url: string, options?: any): Promise<any>;
+    post: (url: string, body?: BodyInit) => Promise<any>;
+    put: (url: string, body?: BodyInit) => Promise<any>;
+    delete: (url: string, body?: BodyInit) => Promise<any>;
+    callRequest(url: string, options?: RequestInit): Promise<any>;
 }
