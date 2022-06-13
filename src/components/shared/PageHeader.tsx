@@ -49,6 +49,7 @@ const Header = styled.div`
     justify-content: space-between;
     box-sizing: border-box;
     position: sticky;
+    transition: background-color 0.2s ease;
     top: 0;
     left: 0;
     background-color: ${(props) => props.theme.appBackground};

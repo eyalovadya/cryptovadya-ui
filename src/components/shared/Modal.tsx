@@ -49,7 +49,7 @@ const Modal = ({ children, isOpen, title, containerProps, footerProps, handleClo
                                     handleClose?.();
                                 }}
                             >
-                                ✖
+                                ✕
                             </CloseButton>
                         </Header>
                         <Content>{children}</Content>
@@ -121,6 +121,7 @@ const Footer = styled.div`
 
 const CloseButton = styled.div`
     cursor: pointer;
+    color: ${(props) => props.theme.textColor};
 `;
 
 const Title = styled.div``;

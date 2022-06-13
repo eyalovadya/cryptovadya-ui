@@ -9,7 +9,7 @@ import PageLayout from '../../shared/PageLayout';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Loader from '../../shared/Loader';
-import PlusIcon from '../../shared/PlusIcon';
+import PlusIcon from '../../shared/svgIcons/PlusIcon';
 
 type Props = {
     dashboards: Dashboard[];
@@ -31,22 +31,35 @@ const Dashboards = ({ dashboards, fetchDashboards }: Props) => {
 
     return (
         <PageLayout title="Dashboards">
-            <Link to={`/dashboards/new`} state={{ backgroundLocation: location }}>
-                <NewDashboardContainer>
-                    <NewDashboardText>New Dashboard</NewDashboardText>
-                    <NewDashboardPlus>
-                        <PlusIcon />
-                    </NewDashboardPlus>
-                </NewDashboardContainer>
-            </Link>
-            {dashboards.map((dashboard) => (
-                <Link key={dashboard.id} to={`/dashboards/${dashboard.id}`}>
-                    <DashboardItem dashboard={dashboard} />
+            <Container>
+                <Link to={`/dashboards/new`} state={{ backgroundLocation: location }}>
+                    <NewDashboardContainer>
+                        <NewDashboardText>New Dashboard</NewDashboardText>
+                        <NewDashboardPlus>
+                            <PlusIcon />
+                        </NewDashboardPlus>
+                    </NewDashboardContainer>
                 </Link>
-            ))}
+                {dashboards.map((dashboard) => (
+                    <Link key={dashboard.id} to={`/dashboards/${dashboard.id}`}>
+                        <DashboardItem dashboard={dashboard} />
+                    </Link>
+                ))}
+            </Container>
         </PageLayout>
     );
 };
+
+const Container = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 8px;
+
+    @media (max-width: 768px) {
+        justify-content: center;
+    }
+`;
 
 const NewDashboardContainer = styled(DashboardItemStyle)`
     border: 1px dashed ${(props) => `${props.theme.colors.primary}aa`};
@@ -59,6 +72,7 @@ const NewDashboardContainer = styled(DashboardItemStyle)`
 `;
 
 const NewDashboardText = styled.div``;
+
 const NewDashboardPlus = styled.div`
     display: flex;
     align-items: center;

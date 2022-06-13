@@ -7,7 +7,5 @@ export default interface IUsers {
     getMe: () => Promise<UserResponse>;
     updateMe: (payload: UserUpdatePayload) => Promise<UserResponse>;
     deleteMe: () => Promise<UserResponse>;
-
-    // TODO: server implementation?
     logout: () => Promise<void>;
 }

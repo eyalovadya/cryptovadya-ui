@@ -34,14 +34,7 @@ const ContentWrapper = styled.div`
 `;
 
 const Content = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding-bottom: 8px;
-
-    @media (max-width: 768px) {
-        justify-content: center;
-    }
+    height: 100%;
 `;
 
 export default PageLayout;
