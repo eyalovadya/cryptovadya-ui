@@ -1,6 +1,6 @@
 # CryptOvadya UI
 
-Link: [https://www.cryptovadya.com](cryptovadya.com)
+Link: [cryptovadya.com](https://www.cryptovadya.com)
 
 ## Available Scripts
 
