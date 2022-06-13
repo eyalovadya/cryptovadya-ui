@@ -60,8 +60,6 @@ export class ApiClient implements IApiClient {
 
         const response = await fetch(this.mergeUrl(url), requestOptions);
 
-        this.bodyType = 'JSON';
-
         const data = await response.json();
 
         if (!response.ok) {

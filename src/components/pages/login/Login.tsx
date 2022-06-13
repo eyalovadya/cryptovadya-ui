@@ -71,6 +71,7 @@ const PageContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
 `;
 
 const LoginFormContainer = styled.div`

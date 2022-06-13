@@ -15,9 +15,16 @@
 
 *::-webkit-scrollbar {
     width: 6px;
+
     height: 2px;
 
     right: 2px;
+}
+
+@media (max-width: 768px) {
+    *::-webkit-scrollbar {
+        width: 2px;
+    }
 }
 
 *::-webkit-scrollbar-thumb {

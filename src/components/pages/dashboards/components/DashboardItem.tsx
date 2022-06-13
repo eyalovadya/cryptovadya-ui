@@ -3,6 +3,7 @@ import { Dashboard } from '../../../../types/dashboards';
 import { baseCardStyle } from '../../../../shared/styles';
 import CoinPair from '../../../shared/CoinPair';
 import { useMediaQuery } from 'react-responsive';
+import SadIcon from '../../../shared/svgIcons/SadIcon';
 
 type Props = {
     dashboard: Dashboard;
@@ -30,7 +31,10 @@ const DashboardItem = ({ dashboard }: Props) => {
                         })}
                     </Widgets>
                 ) : (
-                    <Empty>Empty</Empty>
+                    <EmptyContainer>
+                        <SadIcon />
+                        <Empty>Empty</Empty>
+                    </EmptyContainer>
                 )}
             </Content>
         </DashboardItemStyle>
@@ -38,7 +42,7 @@ const DashboardItem = ({ dashboard }: Props) => {
 };
 
 const Title = styled.div`
-    border-bottom: 1px solid ${(props) => props.theme.borderColor};
+    border-bottom: 0.7px solid ${(props) => props.theme.borderColor};
     padding: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -72,6 +76,12 @@ const WidgetWrapper = styled.div`
     }
 `;
 
+const EmptyContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    color: ${(props) => `${props.theme.textColor}aa`};
+    fill: ${(props) => `${props.theme.textColor}aa`};
+`;
 const Empty = styled.div``;
 
 type DashboardItemStyleProps = {
@@ -92,6 +102,9 @@ export const DashboardItemStyle = styled.div<DashboardItemStyleProps>`
     display: flex;
     flex-direction: column;
     flex: 1;
+    &:hover {
+        border: 1px solid ${(props) => `${props.theme.colors.primary}aa`};
+    }
 `;
 
 export default DashboardItem;
