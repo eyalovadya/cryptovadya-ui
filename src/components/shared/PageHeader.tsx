@@ -14,14 +14,14 @@ type Props = {
 const PageHeader = ({ children, actionButtons, goBackPath }: Props) => {
     return (
         <Header>
-            <Title>
-                {children}
+            <TitleContainer>
+                <Title>{children}</Title>
                 {goBackPath && (
                     <Link to={goBackPath}>
                         <Button style={{ fontSize: 12, margin: '0 10px' }}>{'Go Back'}</Button>
                     </Link>
                 )}
-            </Title>
+            </TitleContainer>
 
             <ButtonsContainer>
                 {actionButtons?.map(({ text, link, ...rest }) =>
@@ -48,12 +48,23 @@ const Header = styled.div`
     align-items: center;
     justify-content: space-between;
     box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: ${(props) => props.theme.appBackground};
+    z-index: 10;
 `;
 
-const Title = styled.div`
+const TitleContainer = styled.div`
     font-size: ${(props) => props.theme.textSize.title};
     display: flex;
     align-items: baseline;
+    max-width: 60%;
+`;
+const Title = styled.div`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 const ButtonsContainer = styled.div`

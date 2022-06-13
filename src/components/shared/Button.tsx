@@ -16,23 +16,24 @@ const Button = styled.button<Props>`
     cursor: pointer;
     outline: inherit;
 
-    color: ${(props) => props.theme.mainButtonColor};
+    color: ${(props) => props.theme.colors.primary};
 
     width: ${(props) => props.width ?? 'auto'};
     height: ${(props) => props.height ?? 'auto'};
     font-size: ${(props) => props.fontSize ?? '16px'};
     border-radius: ${(props) => props.theme.borderRadius};
     font-weight: 500;
+    white-space: nowrap;
 
     ${(props) =>
         props.disabled
             ? css`
-                  color: ${(props) => `${props.theme.mainButtonColor}aa`};
-                  cursor: not-allowed;
+                  color: ${(props) => `${props.theme.colors.primary}aa`};
+                  cursor: default;
               `
             : css`
                   &:hover {
-                      color: ${(props) => props.theme.mainButtonColorHover};
+                      color: ${(props) => props.theme.colors.primaryHover};
                   }
               `}
 `;

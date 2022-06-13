@@ -55,7 +55,14 @@ const CreateWidgetModal = ({ createWidget }: Props) => {
     };
 
     const validationSchema = Yup.object({
-        cryptoPair: Yup.object().required('Required').nullable()
+        cryptoPair: Yup.object()
+            .shape({
+                baseCurrency: Yup.string().required(),
+                quoteCurrency: Yup.string().required(),
+                baseCurrencyId: Yup.string().required()
+            })
+            .required('Required')
+            .nullable()
     });
 
     return (

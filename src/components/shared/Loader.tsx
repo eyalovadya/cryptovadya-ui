@@ -1,7 +1,19 @@
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { appSelectors } from '../../state/models/app/selectors';
+import { SpinnerInfinity } from 'spinners-react';
 
-const Loader = () => {
-    return <Container>Loading...</Container>;
+type Props = {
+    size?: number;
+};
+const Loader = ({ size }: Props) => {
+    const appTheme = useSelector(appSelectors.appTheme);
+
+    return (
+        <Container>
+            <SpinnerInfinity color={appTheme.colors.primary} secondaryColor={appTheme.input.backgroundColor} speed={150} size={size} />
+        </Container>
+    );
 };
 
 const Container = styled.div`
