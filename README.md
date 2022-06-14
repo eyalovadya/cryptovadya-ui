@@ -13,6 +13,7 @@ API repo - [CryptOvadya API](https://github.com/eyalovadya/cryptovadya-api)
   - [Widget](#widget)
   - [Dashboard](#dashboard)
   - [User](#user)
+- [Environment Variables](#environment-variables)
 
 ## Features
 - User login and register
@@ -39,11 +40,12 @@ Check [package.json](https://github.com/eyalovadya/cryptovadya-ui/blob/master/pa
 ## Setup
 
 First you need to clone or download the repository.\
-Then, in the project directory run:
-1. `npm install` to get the npm dependencies
-2. `npm start` to run the app in the development mode.
-3. Open [http://localhost:3000](http://localhost:3000) to view it in the browser (it should open automatically).
-4. The page will reload if you make edits and you will see any lint errors in the console.
+Then, in the project root directory:
+1. Run `npm install` to get the npm dependencies
+2. Create .env file and add the [environment variables](#environment-variables)
+3. Run `npm start` to run the app in the development mode
+4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser (it should open automatically) \
+   The page will reload if you make edits and you will see any lint errors in the console.
 
 ## Main Entities
 
@@ -119,6 +121,11 @@ export type User = {
     firstName: string;
     lastName: string;
 };
+```
+
+## Environment Variables
+```sh
+REACT_APP_API_URL=
 ```
 
 ## Credits
