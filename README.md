@@ -1,46 +1,125 @@
 # CryptOvadya UI
+CryptOvadya is a platform for creating and managing dashboards of crypto data.
 
-Link: [cryptovadya.com](https://www.cryptovadya.com)
+Website - [cryptovadya.com](https://www.cryptovadya.com) \
+API repo - [CryptOvadya API](https://github.com/eyalovadya/cryptovadya-api)
 
-## Available Scripts
+## Table of Content:
 
-In the project directory, you can run:
+- [Features](#features)
+- [Built With](#built-with)
+- [Setup](#setup)
+- [Main Entities](#main-entities)
+  - [Widget](#widget)
+  - [Dashboard](#dashboard)
+  - [User](#user)
 
-### `npm start`
+## Features
+- User login and register
+- Create multiple dashboards 
+- Create multiple widgets for each dashboard 
+- Option to delete dashboard/widget
+- Update user details (first name, last name)
+- Update dashboard title
+- Switch between dark and light theme
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+![CryptOvadya Platform](https://media.giphy.com/media/cscsyMQtPXFz5BSgTQ/giphy.gif)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Built With
 
-### `npm test`
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [styled-components](https://styled-components.com/)
+- [Rematch](https://github.com/rematch/rematch) with [Reselect](https://www.npmjs.com/package/reselect) for state management
+- [Formik](https://formik.org/)
+- [React Select](https://react-select.com/home)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Check [package.json](https://github.com/eyalovadya/cryptovadya-ui/blob/master/package.json) for more :wink:
 
-### `npm run build`
+## Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+First you need to clone or download the repository.\
+Then, in the project directory run:
+1. `npm install` to get the npm dependencies
+2. `npm start` to run the app in the development mode.
+3. Open [http://localhost:3000](http://localhost:3000) to view it in the browser (it should open automatically).
+4. The page will reload if you make edits and you will see any lint errors in the console.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Main Entities
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Widget
+Widget is a generic entity, it represents a common set of data which you would like to see in the dashboard. \
+Each widget has a type `WidgetType` by which the data to be represented is determined. \
+In this project we have a single type of widget `STAT_CARD`. \
+`STAT_CARD` data gives us information about a single crypto pair.
 
-### `npm run eject`
+#### TypeScript representation: 
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### `Widget Type`
+```typescript
+const WIDGET_TYPES = ['STAT_CARD'] as const;
+type WidgetType = typeof WIDGET_TYPES[number]; // compiles to - type WidgetType = 'STAT_CARD'
+```
+If you would like to add more widget types, just add them to the `WIDGET_TYPES` array. \
+For each widget type you need to create the corresponding `WidgetData` type (e.g. `StatCardData`) and add UI component to represent the data in [here](https://github.com/eyalovadya/cryptovadya-ui/blob/master/src/components/pages/singleDashboard/components/dashboardWidget/DashboardWidget.tsx).
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**StatCardData Example:**
+```typescript
+type StatCardData = {
+    baseCurrency: string;
+    quoteCurrency: string;
+    value: number;
+    dayDiffPrecent: number;
+};
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### `Widget Data`
+```typescript
+type WidgetData<T extends WidgetType = WidgetType> = T extends 'STAT_CARD' ? StatCardData : any;
+```
+To add new data type extend to ternary expression. 
+For example: 
+```typescript
+type WidgetData<T extends WidgetType = WidgetType> = T extends 'STAT_CARD' ? StatCardData : 'NEW_TYPE' ? NewTypeData : any;
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+#### `Widget`
+```typescript
+type Widget<T extends WidgetType = WidgetType> = {
+    id: number;
+    dashboardId: number;
+    type: T;
+    data: WidgetData<T>;
+};
+```
+Widget have a generic widget type parameter `T` which defaults to all widget types. Then we determine the data prop type with `WidgetData<T>`
 
-## Learn More
+### Dashboard
+Dashboard have a title and a collection of widgets of all types.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### TypeScript representation: 
+```typescript
+type Dashboard = {
+    id: number;
+    userId: string;
+    title: string;
+    widgets: Widget[];
+};
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### User
+User can manage a collection of dashboards.
+
+
+#### TypeScript representation: 
+```typescript
+export type User = {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+};
+```
+
+## Credits
+[Eyal Ovadya](https://github.com/eyalovadya) :)
