@@ -16,7 +16,7 @@ API repo - [CryptOvadya API](https://github.com/eyalovadya/cryptovadya-api)
 - [Environment Variables](#environment-variables)
 
 ## Features
-- User login and register
+- User login and registration
 - Create multiple dashboards 
 - Create multiple widgets for each dashboard 
 - Option to delete dashboard/widget
